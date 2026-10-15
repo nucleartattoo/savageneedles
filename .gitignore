@@ -1,0 +1,13 @@
+node_modules
+dist
+.output
+.tanstack
+.logs
+artifacts/*.json
+artifacts/extracted/*.json
+artifacts/migration_state.json
+.env
+.env.local
+.DS_Store
+*.pyc
+__pycache__/
