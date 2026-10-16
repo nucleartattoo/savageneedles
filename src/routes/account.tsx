@@ -83,6 +83,7 @@ function AccountPage() {
   const [addresses, setAddresses] = useState<StudioAddress[]>(DEFAULT_ADDRESSES)
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false)
   const [editingAddressId, setEditingAddressId] = useState<string | null>(null)
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
   const [addressSuccessMsg, setAddressSuccessMsg] = useState<string | null>(null)
   const [addressFormData, setAddressFormData] = useState<Omit<StudioAddress, 'id'>>({
     label: '',
@@ -194,22 +195,21 @@ function AccountPage() {
     setTimeout(() => setAddressSuccessMsg(null), 3500)
   }
 
-  const handleDeleteAddress = (id: string) => {
-    if (confirm('Are you sure you want to delete this address from your studio address book?')) {
-      const remaining = addresses.filter((a) => a.id !== id)
-      // If we deleted the default and there are remaining, set first as default
-      if (remaining.length > 0 && !remaining.some((a) => a.isDefault)) {
-        remaining[0].isDefault = true
-      }
-      setAddresses(remaining)
-      try {
-        localStorage.setItem('savage_studio_addresses', JSON.stringify(remaining))
-      } catch {
-        // Ignore
-      }
-      setAddressSuccessMsg('Address removed from address book.')
-      setTimeout(() => setAddressSuccessMsg(null), 3000)
+  const handleExecuteDeleteAddress = (id: string) => {
+    const remaining = addresses.filter((a) => a.id !== id)
+    // If we deleted the default and there are remaining, set first as default
+    if (remaining.length > 0 && !remaining.some((a) => a.isDefault)) {
+      remaining[0].isDefault = true
     }
+    setAddresses(remaining)
+    try {
+      localStorage.setItem('savage_studio_addresses', JSON.stringify(remaining))
+    } catch {
+      // Ignore
+    }
+    setConfirmDeleteId(null)
+    setAddressSuccessMsg('Address removed from studio address book.')
+    setTimeout(() => setAddressSuccessMsg(null), 3000)
   }
 
   const handleSetDefaultAddress = (id: string) => {
@@ -842,24 +842,46 @@ function AccountPage() {
                       </div>
 
                       <div className="flex items-center justify-end gap-2 pt-4 mt-4 border-t border-zinc-800/80">
-                        <button
-                          type="button"
-                          onClick={() => handleOpenEditAddress(addr)}
-                          className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-800/90 px-3 py-1.5 text-[11px] font-semibold text-white hover:bg-zinc-700 hover:border-zinc-600 transition cursor-pointer"
-                        >
-                          <Edit3 className="h-3 w-3 text-amber-400" />
-                          <span>Edit</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteAddress(addr.id)}
-                          disabled={addresses.length === 1}
-                          title={addresses.length === 1 ? 'Cannot delete the sole address' : 'Delete address'}
-                          className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-800 bg-zinc-900/80 px-3 py-1.5 text-[11px] font-semibold text-zinc-400 hover:text-red-400 hover:border-red-900/50 transition cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
-                        >
-                          <Trash2 className="h-3 w-3" />
-                          <span>Delete</span>
-                        </button>
+                        {confirmDeleteId === addr.id ? (
+                          <div className="flex items-center gap-1.5 animate-in fade-in duration-150">
+                            <button
+                              type="button"
+                              onClick={() => handleExecuteDeleteAddress(addr.id)}
+                              className="inline-flex items-center gap-1 rounded-lg bg-red-600 px-2.5 py-1.5 text-[11px] font-bold text-white hover:bg-red-700 transition cursor-pointer shadow-sm shadow-red-950/40"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                              <span>Confirm Delete</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setConfirmDeleteId(null)}
+                              className="inline-flex items-center rounded-lg border border-zinc-700 bg-zinc-800 px-2 py-1.5 text-[11px] font-semibold text-zinc-300 hover:text-white transition cursor-pointer"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() => handleOpenEditAddress(addr)}
+                              className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-800/90 px-3 py-1.5 text-[11px] font-semibold text-white hover:bg-zinc-700 hover:border-zinc-600 transition cursor-pointer"
+                            >
+                              <Edit3 className="h-3 w-3 text-amber-400" />
+                              <span>Edit</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setConfirmDeleteId(addr.id)}
+                              disabled={addresses.length === 1}
+                              title={addresses.length === 1 ? 'Cannot delete the sole address' : 'Delete address'}
+                              className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-800 bg-zinc-900/80 px-3 py-1.5 text-[11px] font-semibold text-zinc-400 hover:text-red-400 hover:border-red-900/50 transition cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                              <span>Delete</span>
+                            </button>
+                          </>
+                        )}
                       </div>
                     </div>
                   ))}
