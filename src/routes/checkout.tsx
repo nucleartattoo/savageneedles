@@ -429,7 +429,7 @@ function CheckoutPage() {
         <div className="pt-4">
           <Link
             to="/categories/$slug"
-            params={{ slug: 'tattoo-machines' }}
+            params={{ slug: 'papa-products' }}
             className="inline-flex rounded-lg bg-amber-500 px-6 py-2.5 text-xs font-bold text-black hover:bg-amber-400"
           >
             Explore Tattoo Equipment

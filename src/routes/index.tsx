@@ -63,7 +63,7 @@ function NetflixCinemaHomePage() {
         <NetflixRow
           title="Trending Now: Wireless Battery Machines"
           subtitle="Brushless motors, dual battery setups, and precision stroke adjustments"
-          categorySlug="tattoo-machines"
+          categorySlug="papa-machines"
           products={wirelessMachines}
           onOpenPreview={(p) => setPreviewProduct(p)}
         />
@@ -74,7 +74,7 @@ function NetflixCinemaHomePage() {
         <NetflixRow
           title="Studio Kits & Turnkey Bundles"
           subtitle="Complete pro sets with wireless pen, power supply, ink cups, and assorted needles"
-          categorySlug="tattoo-kit"
+          categorySlug="cartridge-grips"
           products={tattooKits}
           onOpenPreview={(p) => setPreviewProduct(p)}
         />
@@ -85,7 +85,7 @@ function NetflixCinemaHomePage() {
         <NetflixRow
           title="Precision Cartridge Needles"
           subtitle="Medical grade 316 stainless steel, safety membrane, and ultra-stable solder"
-          categorySlug="tattoo-needles"
+          categorySlug="papa-cartridges"
           products={cartridgeNeedles}
           onOpenPreview={(p) => setPreviewProduct(p)}
         />
@@ -96,7 +96,7 @@ function NetflixCinemaHomePage() {
         <NetflixRow
           title="Digital Power Stations & Wireless Battery Packs"
           subtitle="RCA adapters, LCD color screens, and steady voltage regulators"
-          categorySlug="tattoo-power-supply"
+          categorySlug="papa-power-supply"
           products={powerSupplies}
           onOpenPreview={(p) => setPreviewProduct(p)}
         />

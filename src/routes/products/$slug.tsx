@@ -441,10 +441,10 @@ function ProductDetailPage() {
         <ChevronRight className="h-3 w-3 text-zinc-600" />
         <Link
           to="/categories/$slug"
-          params={{ slug: 'tattoo-machines' }}
+          params={{ slug: isNeedleProduct ? 'savage-cartridges' : 'papa-products' }}
           className="hover:text-zinc-300 transition"
         >
-          Catalog
+          {isNeedleProduct ? 'Savage Cartridges' : 'Catalog'}
         </Link>
         <ChevronRight className="h-3 w-3 text-zinc-600" />
         <span className="text-zinc-300 font-medium truncate max-w-sm">{product.name}</span>
@@ -781,7 +781,7 @@ function ProductDetailPage() {
             </div>
             <Link
               to="/categories/$slug"
-              params={{ slug: 'tattoo-machines' }}
+              params={{ slug: 'papa-products' }}
               className="text-xs font-semibold text-zinc-400 hover:text-white transition flex items-center gap-1"
             >
               View More <ChevronRight className="h-3.5 w-3.5" />

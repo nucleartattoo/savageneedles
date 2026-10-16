@@ -92,8 +92,24 @@ export function getTopCategories(): CatalogCategory[] {
     })
 }
 
+const CATEGORY_ALIASES: Record<string, string> = {
+  'tattoo-machines': 'papa-machines',
+  'tattoo-needles': 'savage-cartridges',
+  'tattoo-kit': 'cartridge-grips',
+  'tattoo-kits': 'cartridge-grips',
+  'tattoo-power-supply': 'papa-power-supply',
+  'power-supply': 'papa-power-supply',
+  grips: 'cartridge-grips',
+  all: 'papa-products',
+}
+
 export function getCategoryBySlug(slug: string): CatalogCategory | undefined {
-  const match = rawCategoriesList.find((c) => c.slug === slug || c.slug === slug.toLowerCase())
+  const normalized = (slug || '').toLowerCase().trim()
+  const targetSlug = CATEGORY_ALIASES[normalized] || normalized
+
+  const match = rawCategoriesList.find(
+    (c) => c.slug === targetSlug || c.slug.toLowerCase() === targetSlug,
+  )
   if (!match) return undefined
 
   const subcategories = (match.children_ids || [])

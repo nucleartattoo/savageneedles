@@ -79,14 +79,14 @@ function CartPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
             <Link
               to="/categories/$slug"
-              params={{ slug: 'tattoo-machines' }}
+              params={{ slug: 'papa-machines' }}
               className="w-full sm:w-auto rounded-lg bg-amber-500 px-6 py-2.5 text-xs font-bold text-black transition hover:bg-amber-400"
             >
-              Browse Tattoo Machines
+              Browse Papa Machines
             </Link>
             <Link
               to="/categories/$slug"
-              params={{ slug: 'tattoo-needles' }}
+              params={{ slug: 'papa-cartridges' }}
               className="w-full sm:w-auto rounded-lg border border-zinc-700 bg-zinc-800 px-6 py-2.5 text-xs font-semibold text-white transition hover:bg-zinc-700"
             >
               Explore Needles & Cartridges
