@@ -386,7 +386,7 @@ function ProductDetailPage() {
       {toastItem && (
         <aside
           aria-label="Added to cart notification"
-          className="fixed bottom-6 right-6 z-50 flex max-w-md items-center gap-4 rounded-2xl border border-zinc-700 bg-[#1f1f1f]/95 p-4 shadow-2xl backdrop-blur-md animate-in slide-in-from-bottom-5 duration-300"
+          className="fixed bottom-6 left-4 right-4 sm:left-auto sm:right-6 z-50 flex max-w-md items-center gap-4 rounded-2xl border border-zinc-700 bg-[#1f1f1f]/95 p-4 shadow-2xl backdrop-blur-md animate-in slide-in-from-bottom-5 duration-300"
         >
           <div className="h-14 w-14 flex-shrink-0 overflow-hidden rounded-xl border border-zinc-800 bg-black p-1 flex items-center justify-center">
             {toastItem.image ? (
