@@ -413,17 +413,52 @@ export function Header() {
                   </Link>
                 ))
               ) : searchQuery.trim().length > 1 ? (
-                <div className="py-8 text-center text-xs text-zinc-500">
-                  No matching products found in the catalog.
+                <div className="py-8 text-center space-y-3">
+                  <p className="text-xs text-zinc-500">No matching products found in the catalog.</p>
+                  <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+                    <Link
+                      to="/categories/$slug"
+                      params={{ slug: 'papa-machines' }}
+                      onClick={() => setSearchOpen(false)}
+                      className="rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-1.5 text-xs text-zinc-300 hover:text-white"
+                    >
+                      Browse Papa Machines
+                    </Link>
+                    <Link
+                      to="/categories/$slug"
+                      params={{ slug: 'papa-cartridges' }}
+                      onClick={() => setSearchOpen(false)}
+                      className="rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-1.5 text-xs text-zinc-300 hover:text-white"
+                    >
+                      Explore Cartridges
+                    </Link>
+                  </div>
                 </div>
               ) : (
-                <div className="py-6 text-center text-xs text-zinc-500 flex flex-col items-center gap-2">
-                  <Command className="h-6 w-6 text-zinc-700" />
-                  <span>Type at least 2 characters to search across all products.</span>
-                  <span className="text-[11px] text-zinc-600">
-                    Pro-tip: Press <kbd className="font-mono text-zinc-400">Esc</kbd> anytime to
-                    close.
-                  </span>
+                <div className="py-6 space-y-4">
+                  <div className="text-center text-xs text-zinc-500 flex flex-col items-center gap-1.5">
+                    <Command className="h-5 w-5 text-zinc-600" />
+                    <span>Search needle configurations (e.g. 1005M1), Papa rotary pens or grips</span>
+                  </div>
+
+                  {/* Hot Studio Search Shortcuts */}
+                  <div className="border-t border-zinc-800/80 pt-3">
+                    <span className="text-[11px] font-bold text-zinc-500 uppercase tracking-wider block mb-2">
+                      Popular Studio Searches
+                    </span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {['1005M1', '1203RL', 'Wireless Pen', 'Click Grip', 'Power Supply', 'Stencil Paper'].map((term) => (
+                        <button
+                          key={term}
+                          type="button"
+                          onClick={() => setSearchQuery(term)}
+                          className="rounded-lg border border-zinc-800 bg-zinc-950/80 px-2.5 py-1 text-xs text-zinc-300 hover:border-red-500/50 hover:text-white transition cursor-pointer"
+                        >
+                          {term}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               )}
             </div>

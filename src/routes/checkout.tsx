@@ -14,7 +14,7 @@ import {
   Sparkles,
   Truck,
 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useCart } from '~/lib/cart'
 import {
   completeSaleorCheckout,
@@ -25,6 +25,7 @@ import {
   updateSaleorShippingAddress,
 } from '~/lib/saleor/api'
 import { formatPrice } from '~/lib/utils'
+import type { StudioAddress } from '~/routes/account'
 
 export const Route = createFileRoute('/checkout')({
   component: CheckoutPage,
@@ -67,6 +68,9 @@ function CheckoutPage() {
     clearCart,
   } = useCart()
 
+  const [savedAddresses, setSavedAddresses] = useState<StudioAddress[]>([])
+  const [selectedAddressId, setSelectedAddressId] = useState<string>('custom')
+
   const [formData, setFormData] = useState({
     email: 'artist@blacklotus.studio',
     phone: '+12135550199',
@@ -80,6 +84,90 @@ function CheckoutPage() {
     postalCode: '90001',
     country: 'United States',
   })
+
+  // Load saved studio addresses & profile from account portal if present
+  useEffect(() => {
+    try {
+      const storedAddresses = localStorage.getItem('savage_studio_addresses')
+      const storedProfile = localStorage.getItem('savage_studio_profile')
+      let profileCompany = 'Black Lotus Tattoo Atelier'
+      let profileArtist = 'Marcus Vance'
+      let profileEmail = 'artist@blacklotus.studio'
+      let profilePhone = '+12135550199'
+
+      if (storedProfile) {
+        const p = JSON.parse(storedProfile)
+        if (p.studioName) profileCompany = p.studioName
+        if (p.residentTattooist) profileArtist = p.residentTattooist
+        if (p.contactEmail) profileEmail = p.contactEmail
+        if (p.studioPhone) profilePhone = p.studioPhone
+      }
+
+      const names = profileArtist.trim().split(' ')
+      const firstName = names[0] || 'Marcus'
+      const lastName = names.slice(1).join(' ') || 'Vance'
+
+      if (storedAddresses) {
+        const list: StudioAddress[] = JSON.parse(storedAddresses)
+        if (Array.isArray(list) && list.length > 0) {
+          setSavedAddresses(list)
+          // Find default address or pick first
+          const defaultAddr = list.find((a) => a.isDefault) || list[0]
+          setSelectedAddressId(defaultAddr.id)
+          const addrNames = defaultAddr.fullName.trim().split(' ')
+          setFormData({
+            email: profileEmail,
+            phone: defaultAddr.phone || profilePhone,
+            firstName: addrNames[0] || firstName,
+            lastName: addrNames.slice(1).join(' ') || lastName,
+            company: defaultAddr.label || profileCompany,
+            address: defaultAddr.streetAddress1,
+            apartment: defaultAddr.streetAddress2 || '',
+            city: defaultAddr.city,
+            state: defaultAddr.state,
+            postalCode: defaultAddr.postalCode,
+            country: defaultAddr.country || 'United States',
+          })
+          return
+        }
+      }
+
+      // If no stored addresses, apply profile info
+      setFormData((prev) => ({
+        ...prev,
+        email: profileEmail,
+        phone: profilePhone,
+        firstName,
+        lastName,
+        company: profileCompany,
+      }))
+    } catch {
+      // Ignore
+    }
+  }, [])
+
+  const handleSelectSavedAddress = (addrId: string) => {
+    setSelectedAddressId(addrId)
+    if (addrId === 'custom') return
+
+    const addr = savedAddresses.find((a) => a.id === addrId)
+    if (!addr) return
+
+    const names = addr.fullName.trim().split(' ')
+    setFormData((prev) => ({
+      ...prev,
+      firstName: names[0] || prev.firstName,
+      lastName: names.slice(1).join(' ') || prev.lastName,
+      company: addr.label || prev.company,
+      address: addr.streetAddress1,
+      apartment: addr.streetAddress2 || '',
+      city: addr.city,
+      state: addr.state,
+      postalCode: addr.postalCode,
+      country: addr.country || 'United States',
+      phone: addr.phone || prev.phone,
+    }))
+  }
 
   const [shippingMethod, setShippingMethod] = useState<'standard' | 'express'>('standard')
   const [paymentMethod, setPaymentMethod] = useState<'card' | 'paypal' | 'net30'>('card')
@@ -500,9 +588,29 @@ function CheckoutPage() {
 
           {/* Step 2: Shipping Destination */}
           <section className="rounded-xl border border-zinc-800 bg-zinc-950 p-6 space-y-4">
-            <h2 className="text-xs font-semibold uppercase tracking-wider text-amber-500 flex items-center gap-2">
-              <MapPin className="h-4 w-4" /> 2. Studio Shipping Destination
-            </h2>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-zinc-800 pb-3">
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-amber-500 flex items-center gap-2">
+                <MapPin className="h-4 w-4" /> 2. Studio Shipping Destination
+              </h2>
+              {savedAddresses.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <span className="text-[11px] text-zinc-400 font-medium">Quick Fill:</span>
+                  <select
+                    value={selectedAddressId}
+                    onChange={(e) => handleSelectSavedAddress(e.target.value)}
+                    className="rounded-lg border border-zinc-700 bg-zinc-900 px-2.5 py-1 text-xs text-white focus:border-amber-500 focus:outline-none"
+                  >
+                    {savedAddresses.map((addr) => (
+                      <option key={addr.id} value={addr.id}>
+                        {addr.label} {addr.isDefault ? '★ (Default)' : ''}
+                      </option>
+                    ))}
+                    <option value="custom">✏️ Enter Custom Address</option>
+                  </select>
+                </div>
+              )}
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-xs text-zinc-400 block mb-1">First Name *</label>

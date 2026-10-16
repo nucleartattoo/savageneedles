@@ -52,6 +52,7 @@ function CategoryPage() {
   const [previewProduct, setPreviewProduct] = useState<CatalogProduct | null>(null)
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false)
   const [gridCols, setGridCols] = useState<'3' | '4'>('4')
+  const [visibleCount, setVisibleCount] = useState(16)
 
   // Load category and raw catalog products
   const category = getCategoryBySlug(slug)
@@ -430,18 +431,45 @@ function CategoryPage() {
 
           {/* Products Grid */}
           {filteredProducts.length > 0 ? (
-            <div
-              className={`grid grid-cols-1 gap-6 sm:grid-cols-2 ${
-                gridCols === '3' ? 'lg:grid-cols-3' : 'lg:grid-cols-3 xl:grid-cols-4'
-              }`}
-            >
-              {filteredProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onPreview={(prod) => setPreviewProduct(prod)}
-                />
-              ))}
+            <div className="space-y-8">
+              <div
+                className={`grid grid-cols-1 gap-6 sm:grid-cols-2 ${
+                  gridCols === '3' ? 'lg:grid-cols-3' : 'lg:grid-cols-3 xl:grid-cols-4'
+                }`}
+              >
+                {filteredProducts.slice(0, visibleCount).map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    onPreview={(prod) => setPreviewProduct(prod)}
+                  />
+                ))}
+              </div>
+
+              {/* Progressive Load More Meter */}
+              {filteredProducts.length > visibleCount && (
+                <div className="pt-6 border-t border-zinc-800 text-center space-y-3">
+                  <div className="text-xs text-zinc-400">
+                    Showing <strong className="text-white">{Math.min(visibleCount, filteredProducts.length)}</strong> of{' '}
+                    <strong className="text-white">{filteredProducts.length}</strong> equipment items
+                  </div>
+                  <div className="mx-auto max-w-xs h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-red-600 transition-all duration-300"
+                      style={{
+                        width: `${Math.min(100, Math.round((visibleCount / filteredProducts.length) * 100))}%`,
+                      }}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setVisibleCount((prev) => prev + 16)}
+                    className="inline-flex items-center gap-2 rounded-xl border border-zinc-700 bg-zinc-800/90 px-6 py-2.5 text-xs font-bold text-white hover:bg-zinc-700 hover:border-zinc-600 transition shadow-lg shadow-black/40 cursor-pointer"
+                  >
+                    <span>Load More Studio Equipment</span>
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <div className="rounded-2xl border border-dashed border-zinc-800 bg-[#141414] p-12 text-center space-y-4">
