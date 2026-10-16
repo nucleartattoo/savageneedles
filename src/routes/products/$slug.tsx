@@ -28,7 +28,7 @@ import {
   getProductBySlug,
   getRelatedProducts,
 } from '~/lib/catalog'
-import { formatPrice } from '~/lib/utils'
+import { cleanDescription, formatPrice } from '~/lib/utils'
 
 function findMatchingChild(
   product: CatalogProduct,
@@ -136,7 +136,7 @@ export const Route = createFileRoute('/products/$slug')({
     }
     const title = `${product.name} | Savage Needles & Papa Supply`
     const description =
-      product.short_description ||
+      cleanDescription(product.short_description) ||
       `Buy authentic ${product.name} (SKU: ${product.sku}) at Savage Needles Official Store with 24-hour dispatch and full warranty.`
     return {
       meta: [
@@ -597,7 +597,7 @@ function ProductDetailPage() {
 
             {product.short_description && (
               <p className="mt-2 text-sm text-zinc-400 leading-relaxed">
-                {product.short_description}
+                {cleanDescription(product.short_description)}
               </p>
             )}
 
