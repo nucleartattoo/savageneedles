@@ -34,6 +34,46 @@ function AccountPage() {
   const [isLoading, setIsLoading] = useState(false)
   const [selectedOrder, setSelectedOrder] = useState<SaleorOrderSummary | null>(null)
 
+  // Studio profile state with local persistence
+  const [profileData, setProfileData] = useState({
+    studioName: 'Black Lotus Tattoo Atelier',
+    residentTattooist: 'Marcus Vance',
+    contactEmail: 'artist@blacklotus.studio',
+    studioPhone: '+1 (213) 555-0199',
+    taxId: 'CA-948192-TAT',
+  })
+  const [isSavingProfile, setIsSavingProfile] = useState(false)
+  const [saveSuccessMessage, setSaveSuccessMessage] = useState<string | null>(null)
+
+  // Load saved profile if available
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('savage_studio_profile')
+      if (saved) {
+        setProfileData(JSON.parse(saved))
+      }
+    } catch {
+      // Ignore storage errors
+    }
+  }, [])
+
+  const handleSaveProfile = (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSavingProfile(true)
+    setSaveSuccessMessage(null)
+
+    setTimeout(() => {
+      try {
+        localStorage.setItem('savage_studio_profile', JSON.stringify(profileData))
+        setIsSavingProfile(false)
+        setSaveSuccessMessage('Studio profile changes saved successfully!')
+        setTimeout(() => setSaveSuccessMessage(null), 4000)
+      } catch {
+        setIsSavingProfile(false)
+      }
+    }, 600)
+  }
+
   const handleFetchOrders = async (query?: string) => {
     setIsLoading(true)
     try {
@@ -421,66 +461,119 @@ function AccountPage() {
 
           {tab === 'profile' && (
             <div className="rounded-2xl border border-zinc-800 bg-[#141414] p-6 space-y-6">
-              <div className="border-b border-zinc-800 pb-4">
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider">
-                  Studio Artist Profile
-                </h3>
-                <p className="text-xs text-zinc-400 mt-1">
-                  Manage your studio accreditation, licensing, and B2B wholesale pricing tier.
-                </p>
+              <div className="border-b border-zinc-800 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+                    Studio Artist Profile
+                  </h3>
+                  <p className="text-xs text-zinc-400 mt-1">
+                    Manage your studio accreditation, licensing, and B2B wholesale pricing tier.
+                  </p>
+                </div>
+                {saveSuccessMessage && (
+                  <div className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-bold text-emerald-400 animate-in fade-in duration-200">
+                    <CheckCircle2 className="h-4 w-4" />
+                    <span>{saveSuccessMessage}</span>
+                  </div>
+                )}
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl">
-                <div>
-                  <label className="text-xs font-semibold text-zinc-300 block mb-1">
-                    Studio Name
-                  </label>
-                  <input
-                    type="text"
-                    defaultValue="Black Lotus Tattoo Atelier"
-                    className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-white"
-                  />
+              <form onSubmit={handleSaveProfile} className="space-y-6 max-w-2xl">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs font-semibold text-zinc-300 block mb-1">
+                      Studio Name
+                    </label>
+                    <input
+                      type="text"
+                      value={profileData.studioName}
+                      onChange={(e) =>
+                        setProfileData((prev) => ({ ...prev, studioName: e.target.value }))
+                      }
+                      className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3.5 py-2 text-xs text-white focus:border-[#E50914] focus:outline-none"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-semibold text-zinc-300 block mb-1">
+                      Resident Tattooist
+                    </label>
+                    <input
+                      type="text"
+                      value={profileData.residentTattooist}
+                      onChange={(e) =>
+                        setProfileData((prev) => ({ ...prev, residentTattooist: e.target.value }))
+                      }
+                      className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3.5 py-2 text-xs text-white focus:border-[#E50914] focus:outline-none"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-semibold text-zinc-300 block mb-1">
+                      Contact Email
+                    </label>
+                    <input
+                      type="email"
+                      value={profileData.contactEmail}
+                      onChange={(e) =>
+                        setProfileData((prev) => ({ ...prev, contactEmail: e.target.value }))
+                      }
+                      className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3.5 py-2 text-xs text-white focus:border-[#E50914] focus:outline-none"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-semibold text-zinc-300 block mb-1">
+                      Studio Phone
+                    </label>
+                    <input
+                      type="tel"
+                      value={profileData.studioPhone}
+                      onChange={(e) =>
+                        setProfileData((prev) => ({ ...prev, studioPhone: e.target.value }))
+                      }
+                      className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3.5 py-2 text-xs text-white focus:border-[#E50914] focus:outline-none"
+                      required
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label className="text-xs font-semibold text-zinc-300 block mb-1">
+                      Wholesale Reseller Tax ID / State Tattoo License
+                    </label>
+                    <input
+                      type="text"
+                      value={profileData.taxId}
+                      onChange={(e) =>
+                        setProfileData((prev) => ({ ...prev, taxId: e.target.value }))
+                      }
+                      className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3.5 py-2 text-xs text-white focus:border-[#E50914] focus:outline-none font-mono"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="text-xs font-semibold text-zinc-300 block mb-1">
-                    Resident Tattooist
-                  </label>
-                  <input
-                    type="text"
-                    defaultValue="Marcus Vance"
-                    className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-white"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-zinc-300 block mb-1">
-                    Contact Email
-                  </label>
-                  <input
-                    type="email"
-                    defaultValue="artist@blacklotus.studio"
-                    className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-white"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-zinc-300 block mb-1">
-                    Studio Phone
-                  </label>
-                  <input
-                    type="tel"
-                    defaultValue="+1 (213) 555-0199"
-                    className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-white"
-                  />
-                </div>
-              </div>
 
-              <div className="pt-2">
-                <button
-                  type="button"
-                  className="rounded-xl bg-[#E50914] px-5 py-2.5 text-xs font-bold text-white hover:bg-red-600 transition cursor-pointer"
-                >
-                  Save Studio Changes
-                </button>
-              </div>
+                <div className="pt-2 flex items-center gap-4">
+                  <button
+                    type="submit"
+                    disabled={isSavingProfile}
+                    className="rounded-xl bg-[#E50914] px-6 py-2.5 text-xs font-bold text-white hover:bg-red-600 transition cursor-pointer flex items-center gap-2 disabled:opacity-50"
+                  >
+                    {isSavingProfile ? (
+                      <>
+                        <RefreshCw className="h-3.5 w-3.5 animate-spin" />
+                        <span>Saving Changes...</span>
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle2 className="h-3.5 w-3.5" />
+                        <span>Save Studio Changes</span>
+                      </>
+                    )}
+                  </button>
+                  {saveSuccessMessage && (
+                    <span className="text-xs text-emerald-400 font-medium">Saved to Studio Records</span>
+                  )}
+                </div>
+              </form>
             </div>
           )}
 
