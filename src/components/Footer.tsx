@@ -72,6 +72,16 @@ export function Footer() {
                   Shipping & Returns
                 </Link>
               </li>
+              <li>
+                <Link to="/wholesale" className="hover:text-white">
+                  B2B Wholesale Tiers
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="hover:text-white">
+                  Contact & Support
+                </Link>
+              </li>
             </ul>
           </div>
 

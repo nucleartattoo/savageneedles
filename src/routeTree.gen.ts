@@ -13,8 +13,10 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as SaleorRouteImport } from './routes/saleor'
 import { Route as ShippingRouteImport } from './routes/shipping'
+import { Route as WholesaleRouteImport } from './routes/wholesale'
 import { Route as CategoriesSlugRouteImport } from './routes/categories/$slug'
 import { Route as ProductsSlugRouteImport } from './routes/products/$slug'
 
@@ -38,6 +40,11 @@ const CheckoutRoute = CheckoutRouteImport.update({
   path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SaleorRoute = SaleorRouteImport.update({
   id: '/saleor',
   path: '/saleor',
@@ -46,6 +53,11 @@ const SaleorRoute = SaleorRouteImport.update({
 const ShippingRoute = ShippingRouteImport.update({
   id: '/shipping',
   path: '/shipping',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WholesaleRoute = WholesaleRouteImport.update({
+  id: '/wholesale',
+  path: '/wholesale',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CategoriesSlugRoute = CategoriesSlugRouteImport.update({
@@ -64,8 +76,10 @@ export interface FileRoutesByFullPath {
   '/account': typeof AccountRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
+  '/contact': typeof ContactRoute
   '/saleor': typeof SaleorRoute
   '/shipping': typeof ShippingRoute
+  '/wholesale': typeof WholesaleRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
 }
@@ -74,8 +88,10 @@ export interface FileRoutesByTo {
   '/account': typeof AccountRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
+  '/contact': typeof ContactRoute
   '/saleor': typeof SaleorRoute
   '/shipping': typeof ShippingRoute
+  '/wholesale': typeof WholesaleRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
 }
@@ -85,8 +101,10 @@ export interface FileRoutesById {
   '/account': typeof AccountRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
+  '/contact': typeof ContactRoute
   '/saleor': typeof SaleorRoute
   '/shipping': typeof ShippingRoute
+  '/wholesale': typeof WholesaleRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/products/$slug': typeof ProductsSlugRoute
 }
@@ -97,8 +115,10 @@ export interface FileRouteTypes {
     | '/account'
     | '/cart'
     | '/checkout'
+    | '/contact'
     | '/saleor'
     | '/shipping'
+    | '/wholesale'
     | '/categories/$slug'
     | '/products/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -107,8 +127,10 @@ export interface FileRouteTypes {
     | '/account'
     | '/cart'
     | '/checkout'
+    | '/contact'
     | '/saleor'
     | '/shipping'
+    | '/wholesale'
     | '/categories/$slug'
     | '/products/$slug'
   id:
@@ -117,8 +139,10 @@ export interface FileRouteTypes {
     | '/account'
     | '/cart'
     | '/checkout'
+    | '/contact'
     | '/saleor'
     | '/shipping'
+    | '/wholesale'
     | '/categories/$slug'
     | '/products/$slug'
   fileRoutesById: FileRoutesById
@@ -128,8 +152,10 @@ export interface RootRouteChildren {
   AccountRoute: typeof AccountRoute
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
+  ContactRoute: typeof ContactRoute
   SaleorRoute: typeof SaleorRoute
   ShippingRoute: typeof ShippingRoute
+  WholesaleRoute: typeof WholesaleRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
   ProductsSlugRoute: typeof ProductsSlugRoute
 }
@@ -164,6 +190,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/saleor': {
       id: '/saleor'
       path: '/saleor'
@@ -176,6 +209,13 @@ declare module '@tanstack/react-router' {
       path: '/shipping'
       fullPath: '/shipping'
       preLoaderRoute: typeof ShippingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/wholesale': {
+      id: '/wholesale'
+      path: '/wholesale'
+      fullPath: '/wholesale'
+      preLoaderRoute: typeof WholesaleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/categories/$slug': {
@@ -200,8 +240,10 @@ const rootRouteChildren: RootRouteChildren = {
   AccountRoute: AccountRoute,
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
+  ContactRoute: ContactRoute,
   SaleorRoute: SaleorRoute,
   ShippingRoute: ShippingRoute,
+  WholesaleRoute: WholesaleRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
   ProductsSlugRoute: ProductsSlugRoute,
 }

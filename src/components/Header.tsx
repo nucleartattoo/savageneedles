@@ -1,11 +1,15 @@
 import { Link } from '@tanstack/react-router'
 import {
+  Building2,
   ChevronRight,
   Command,
+  HelpCircle,
   Menu,
+  MessageSquare,
   Package,
   Search,
   ShoppingBag,
+  Sparkles,
   User,
   X,
   Zap,
@@ -125,6 +129,14 @@ export function Header() {
                 activeProps={{ className: 'text-white font-bold' }}
               >
                 Grips & Accessories
+              </Link>
+
+              <Link
+                to="/wholesale"
+                className="text-xs font-semibold uppercase tracking-wider text-zinc-400 transition-colors hover:text-white whitespace-nowrap"
+                activeProps={{ className: 'text-white font-bold' }}
+              >
+                Wholesale Tiers
               </Link>
 
               <Link
@@ -293,6 +305,22 @@ export function Header() {
                         {totalItems}
                       </span>
                     )}
+                  </Link>
+                  <Link
+                    to="/wholesale"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-medium text-amber-400 hover:bg-zinc-900 transition"
+                  >
+                    <Sparkles className="h-4 w-4 text-amber-400" />
+                    <span>B2B Wholesale Tiers</span>
+                  </Link>
+                  <Link
+                    to="/contact"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-medium text-zinc-300 hover:bg-zinc-900 hover:text-white transition"
+                  >
+                    <MessageSquare className="h-4 w-4 text-zinc-500" />
+                    <span>Contact & Support</span>
                   </Link>
                   <Link
                     to="/saleor"
