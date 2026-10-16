@@ -22,6 +22,21 @@ import {
 } from '~/lib/catalog'
 
 export const Route = createFileRoute('/categories/$slug')({
+  head: ({ params }) => {
+    const category = getCategoryBySlug(params.slug)
+    const name = category?.name || params.slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())
+    const title = `${name} | Savage Needles Official Store`
+    const description = `Shop authentic ${name} tattoo supplies, needle cartridges, and professional studio equipment at Savage Needles & Papa Supply.`
+    return {
+      meta: [
+        { title },
+        { name: 'description', content: description },
+        { property: 'og:title', content: title },
+        { property: 'og:description', content: description },
+        { property: 'og:type', content: 'website' },
+      ],
+    }
+  },
   component: CategoryPage,
 })
 

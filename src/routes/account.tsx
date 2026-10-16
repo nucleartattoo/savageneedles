@@ -181,8 +181,8 @@ function AccountPage() {
 
                 {/* Quick Order Chips */}
                 <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-zinc-800/80 text-xs">
-                  <span className="text-zinc-500">Quick Test Orders:</span>
-                  {['18', '17', '16', '15'].map((num) => (
+                  <span className="text-zinc-500">Live Studio Orders:</span>
+                  {(orders.length > 0 ? orders.slice(0, 5).map((o) => String(o.number)) : ['2', '1']).map((num) => (
                     <button
                       key={num}
                       type="button"

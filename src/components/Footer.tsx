@@ -68,7 +68,9 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <span className="hover:text-white cursor-pointer">Shipping & Returns</span>
+                <Link to="/shipping" className="hover:text-white">
+                  Shipping & Returns
+                </Link>
               </li>
             </ul>
           </div>
