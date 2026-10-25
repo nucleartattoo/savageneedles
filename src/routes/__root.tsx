@@ -1,5 +1,11 @@
 import type { QueryClient } from '@tanstack/react-query'
-import { HeadContent, Link, Outlet, Scripts, createRootRouteWithContext } from '@tanstack/react-router'
+import {
+  HeadContent,
+  Link,
+  Outlet,
+  Scripts,
+  createRootRouteWithContext,
+} from '@tanstack/react-router'
 import { AlertCircle, ArrowLeft, Compass, Home, Zap } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { CategoryNav } from '~/components/CategoryNav'
@@ -45,7 +51,8 @@ function NotFoundComponent() {
           Studio Equipment Route Lost
         </h1>
         <p className="mx-auto max-w-md text-sm text-zinc-400">
-          The requested studio supply, needle configuration, or catalog category could not be located in the Savage Needles system.
+          The requested studio supply, needle configuration, or catalog category could not be
+          located in the Savage Needles system.
         </p>
       </div>
 

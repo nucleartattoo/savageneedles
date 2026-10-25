@@ -13,4 +13,18 @@ export default defineConfig({
     tanstackStart(),
     viteReact(),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('src/data/catalog.json')) {
+            return 'catalog-data'
+          }
+          if (id.includes('node_modules/lucide-react')) {
+            return 'vendor-icons'
+          }
+        },
+      },
+    },
+  },
 })

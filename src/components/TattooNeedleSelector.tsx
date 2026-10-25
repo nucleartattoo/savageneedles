@@ -110,8 +110,8 @@ export function TattooNeedleSelector({
         return typeMatch && gaugeMatch
       })
       .sort((a, b) => {
-        const numA = parseInt(a.size || '0', 10)
-        const numB = parseInt(b.size || '0', 10)
+        const numA = Number.parseInt(a.size || '0', 10)
+        const numB = Number.parseInt(b.size || '0', 10)
         return numA - numB
       })
   }, [variants, selectedType, selectedGauge])
@@ -128,10 +128,8 @@ export function TattooNeedleSelector({
     }
   }, [matchingVariants, selectedVariant?.id, onSelectVariant])
 
-  const activeTypeConfig =
-    NEEDLE_TYPES.find((t) => t.key === selectedType) || NEEDLE_TYPES[0]
-  const activeGaugeConfig =
-    GAUGES.find((g) => g.key === selectedGauge) || GAUGES[1]
+  const activeTypeConfig = NEEDLE_TYPES.find((t) => t.key === selectedType) || NEEDLE_TYPES[0]
+  const activeGaugeConfig = GAUGES.find((g) => g.key === selectedGauge) || GAUGES[1]
 
   return (
     <div className="space-y-6 rounded-2xl border border-zinc-800 bg-[#161616] p-5 shadow-xl">
@@ -188,9 +186,7 @@ export function TattooNeedleSelector({
                   </span>
                   {isSelected && <Check className="h-3.5 w-3.5 text-red-500 stroke-[3]" />}
                 </div>
-                <span className="mt-2 text-xs font-bold text-white leading-tight">
-                  {t.name}
-                </span>
+                <span className="mt-2 text-xs font-bold text-white leading-tight">{t.name}</span>
                 <span className="mt-1 text-[10px] text-zinc-400 line-clamp-1 leading-snug">
                   {t.shortDesc}
                 </span>

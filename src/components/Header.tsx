@@ -414,7 +414,9 @@ export function Header() {
                 ))
               ) : searchQuery.trim().length > 1 ? (
                 <div className="py-8 text-center space-y-3">
-                  <p className="text-xs text-zinc-500">No matching products found in the catalog.</p>
+                  <p className="text-xs text-zinc-500">
+                    No matching products found in the catalog.
+                  </p>
                   <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
                     <Link
                       to="/categories/$slug"
@@ -438,7 +440,9 @@ export function Header() {
                 <div className="py-6 space-y-4">
                   <div className="text-center text-xs text-zinc-500 flex flex-col items-center gap-1.5">
                     <Command className="h-5 w-5 text-zinc-600" />
-                    <span>Search needle configurations (e.g. 1005M1), Papa rotary pens or grips</span>
+                    <span>
+                      Search needle configurations (e.g. 1005M1), Papa rotary pens or grips
+                    </span>
                   </div>
 
                   {/* Hot Studio Search Shortcuts */}
@@ -447,7 +451,14 @@ export function Header() {
                       Popular Studio Searches
                     </span>
                     <div className="flex flex-wrap gap-1.5">
-                      {['1005M1', '1203RL', 'Wireless Pen', 'Click Grip', 'Power Supply', 'Stencil Paper'].map((term) => (
+                      {[
+                        '1005M1',
+                        '1203RL',
+                        'Wireless Pen',
+                        'Click Grip',
+                        'Power Supply',
+                        'Stencil Paper',
+                      ].map((term) => (
                         <button
                           key={term}
                           type="button"

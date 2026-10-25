@@ -22,6 +22,11 @@ REDIS_PORT="6383"
 DASHBOARD_NAME="sava-dashboard"
 DASHBOARD_PORT="9005"
 
+if [ -f ".env" ]; then
+  # Load server-side secrets from .env without exporting into client builds
+  export $(grep -v '^#' .env | xargs)
+fi
+
 if [ ! -x "$CONTAINER_BIN" ]; then
   echo "❌ 未检测到 Apple Container CLI: $CONTAINER_BIN"
   exit 1
@@ -82,6 +87,7 @@ start_containers() {
         -e NODE_ENV="production" \
         -e SALEOR_API_ENDPOINT="http://192.168.64.1:8005/graphql/" \
         -e SALEOR_CHANNEL="default-channel" \
+        -e SALEOR_APP_TOKEN="${SALEOR_APP_TOKEN:-}" \
         "$STOREFRONT_IMAGE" || true
     elif ! "$CONTAINER_BIN" list | grep -q "$STOREFRONT_NAME"; then
       echo "🔄 正在启动现有容器 $STOREFRONT_NAME..."

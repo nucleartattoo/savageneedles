@@ -73,7 +73,8 @@ function ContactSupportPage() {
           Contact Studio Support
         </h1>
         <p className="mx-auto max-w-2xl text-sm text-zinc-400">
-          Have questions about Papa rotary pen voltage matching, needle taper configurations, or need machine servicing? Our California studio team is here to assist.
+          Have questions about Papa rotary pen voltage matching, needle taper configurations, or
+          need machine servicing? Our California studio team is here to assist.
         </p>
       </div>
 
@@ -100,7 +101,9 @@ function ContactSupportPage() {
             Invoice questions, custom invoice requests, and wholesale accreditation.
           </p>
           <p className="text-xs font-mono font-bold text-white pt-1">support@savageneedles.com</p>
-          <span className="text-[10px] text-zinc-500 block">Guaranteed reply within 4 business hours</span>
+          <span className="text-[10px] text-zinc-500 block">
+            Guaranteed reply within 4 business hours
+          </span>
         </div>
 
         <div className="rounded-2xl border border-zinc-800 bg-[#161616] p-6 space-y-3">
@@ -112,7 +115,9 @@ function ContactSupportPage() {
             Los Angeles logistics hub for studio will-call pickups and machine warranty intake.
           </p>
           <p className="text-xs text-zinc-300 pt-1 leading-snug">
-            742 Evergreen Terrace, Suite 200<br />Los Angeles, CA 90001, USA
+            742 Evergreen Terrace, Suite 200
+            <br />
+            Los Angeles, CA 90001, USA
           </p>
         </div>
       </div>
@@ -126,7 +131,8 @@ function ContactSupportPage() {
               <span>Submit Support / Repair Request</span>
             </h3>
             <p className="text-xs text-zinc-400 mt-1">
-              File a ticket for Papa machine warranty servicing, cartridge batch inquiries, or order adjustments.
+              File a ticket for Papa machine warranty servicing, cartridge batch inquiries, or order
+              adjustments.
             </p>
           </div>
 
@@ -135,7 +141,8 @@ function ContactSupportPage() {
               <CheckCircle2 className="h-10 w-10 text-emerald-400 mx-auto" />
               <h4 className="text-sm font-bold text-white">Ticket Submitted Successfully</h4>
               <p className="text-xs text-zinc-400">
-                Ticket reference #SN-{Math.floor(100000 + Math.random() * 900000)} has been logged. Our technical engineer will review your details and contact you via email shortly.
+                Ticket reference #SN-{Math.floor(100000 + Math.random() * 900000)} has been logged.
+                Our technical engineer will review your details and contact you via email shortly.
               </p>
               <button
                 type="button"
@@ -196,7 +203,9 @@ function ContactSupportPage() {
                   <input
                     type="text"
                     value={formData.orderNumber}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, orderNumber: e.target.value }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({ ...prev, orderNumber: e.target.value }))
+                    }
                     placeholder="e.g. #3 or #18"
                     className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-white focus:border-red-600 focus:outline-none font-mono"
                   />
@@ -214,7 +223,9 @@ function ContactSupportPage() {
                 >
                   <option value="warranty-repair">Papa Rotary Machine Warranty & Repair</option>
                   <option value="order-shipping">Order Tracking & Shipping Logistics</option>
-                  <option value="cartridge-specs">Needle Cartridge Taper & Spec Consultation</option>
+                  <option value="cartridge-specs">
+                    Needle Cartridge Taper & Spec Consultation
+                  </option>
                   <option value="wholesale-terms">B2B Wholesale Account & Invoice Terms</option>
                   <option value="general-inquiry">General Studio Inquiries</option>
                 </select>
@@ -266,10 +277,13 @@ function ContactSupportPage() {
             </h4>
             <div className="text-xs text-zinc-400 space-y-2.5 leading-relaxed">
               <p>
-                Every genuine Papa Rotary Pen machine purchased through Savage Needles includes an unconditional 1-year motor repair guarantee.
+                Every genuine Papa Rotary Pen machine purchased through Savage Needles includes an
+                unconditional 1-year motor repair guarantee.
               </p>
               <p>
-                If your machine experiences voltage drops, bearing noise, or stroke inconsistency, our California technician will repair or replace the drive unit within 48 hours of intake.
+                If your machine experiences voltage drops, bearing noise, or stroke inconsistency,
+                our California technician will repair or replace the drive unit within 48 hours of
+                intake.
               </p>
             </div>
             <div className="pt-2 border-t border-zinc-800 text-[11px] text-zinc-500">
@@ -282,7 +296,8 @@ function ContactSupportPage() {
               Needle Samples for Studios
             </h4>
             <p className="text-xs text-zinc-400 leading-relaxed">
-              Want your artists to test our membrane tension and ink flow? Request a complementary sample pack with your studio verification.
+              Want your artists to test our membrane tension and ink flow? Request a complementary
+              sample pack with your studio verification.
             </p>
             <Link
               to="/wholesale"

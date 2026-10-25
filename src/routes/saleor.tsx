@@ -33,7 +33,10 @@ export const Route = createFileRoute('/saleor')({
 })
 
 function SaleorIntegrationPage() {
-  const [config, setConfig] = useState(() => getSaleorConfig())
+  const [config, setConfig] = useState({
+    endpoint: 'http://localhost:8005/graphql/',
+    channel: 'default-channel',
+  })
   const [customEndpoint, setCustomEndpoint] = useState(config.endpoint)
   const [customChannel, setCustomChannel] = useState(config.channel)
 
@@ -56,11 +59,15 @@ function SaleorIntegrationPage() {
   const [checkoutTesting, setCheckoutTesting] = useState(false)
   const [checkoutResult, setCheckoutResult] = useState<any>(null)
 
-  // Auto-ping on initial mount
+  // Sync saved localStorage overrides & auto-ping on mount
   useEffect(() => {
-    handlePing(config.endpoint)
+    const saved = getSaleorConfig()
+    setConfig(saved)
+    setCustomEndpoint(saved.endpoint)
+    setCustomChannel(saved.channel)
+    handlePing(saved.endpoint)
     handleFetchProducts()
-  }, [config.endpoint])
+  }, [])
 
   const handlePing = async (endpointToTest?: string) => {
     setPingStatus({ loading: true })

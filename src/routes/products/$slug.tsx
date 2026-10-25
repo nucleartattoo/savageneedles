@@ -221,14 +221,15 @@ function ProductDetailPage() {
     product.sku === 'BNC-03' ||
     (product.variants && product.variants.length > 20)
 
-  const [selectedNeedleVariant, setSelectedNeedleVariant] =
-    useState<ProductChildVariant | null>(() => {
+  const [selectedNeedleVariant, setSelectedNeedleVariant] = useState<ProductChildVariant | null>(
+    () => {
       if (isNeedleProduct && product.variants && product.variants.length > 0) {
         // default to first popular variant (e.g. 1007M1 or 1203RL)
         return product.variants[0]
       }
       return null
-    })
+    },
+  )
 
   const { addItem } = useCart()
   const [quantity, setQuantity] = useState(1)
@@ -357,9 +358,10 @@ function ProductDetailPage() {
     // Trigger visual toast
     setToastItem({
       name: currentVariantName,
-      variantLabel: isNeedleProduct && selectedNeedleVariant?.code
-        ? `CODE: ${selectedNeedleVariant.code} (${selectedNeedleVariant.name})`
-        : formattedOptions.map((o) => o.value).join(' / '),
+      variantLabel:
+        isNeedleProduct && selectedNeedleVariant?.code
+          ? `CODE: ${selectedNeedleVariant.code} (${selectedNeedleVariant.name})`
+          : formattedOptions.map((o) => o.value).join(' / '),
       price: currentPrice,
       quantity,
       image: activeImageUrl,

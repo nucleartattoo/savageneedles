@@ -79,7 +79,9 @@ function WholesalePage() {
         </h1>
 
         <p className="mx-auto max-w-2xl text-sm sm:text-base text-zinc-400 leading-relaxed">
-          Unlock up to 35% margin discounts on Savage Needles medical-grade cartridge boxes, Papa rotary pen machines, and critical power supply hardware. Verified for licensed tattoo artists and studio owners.
+          Unlock up to 35% margin discounts on Savage Needles medical-grade cartridge boxes, Papa
+          rotary pen machines, and critical power supply hardware. Verified for licensed tattoo
+          artists and studio owners.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
@@ -124,7 +126,8 @@ function WholesalePage() {
                 15% OFF <span className="text-xs font-normal text-zinc-400">MSRP</span>
               </div>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                Ideal for solo tattooists and boutique studios stocking daily cartridge needles and clip grips.
+                Ideal for solo tattooists and boutique studios stocking daily cartridge needles and
+                clip grips.
               </p>
               <ul className="space-y-2 text-xs text-zinc-300 pt-2 border-t border-zinc-800">
                 <li className="flex items-center gap-2">
@@ -159,7 +162,8 @@ function WholesalePage() {
                 25% OFF <span className="text-xs font-normal text-zinc-400">MSRP</span>
               </div>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                Designed for high-traffic tattoo studios and academies ordering bulk weekly needle runs.
+                Designed for high-traffic tattoo studios and academies ordering bulk weekly needle
+                runs.
               </p>
               <ul className="space-y-2 text-xs text-zinc-300 pt-2 border-t border-zinc-800">
                 <li className="flex items-center gap-2">
@@ -195,7 +199,8 @@ function WholesalePage() {
                 35% OFF <span className="text-xs font-normal text-zinc-400">MSRP</span>
               </div>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                For regional supply distributors, franchise studios, and international tattoo convention organizers.
+                For regional supply distributors, franchise studios, and international tattoo
+                convention organizers.
               </p>
               <ul className="space-y-2 text-xs text-zinc-300 pt-2 border-t border-zinc-800">
                 <li className="flex items-center gap-2">
@@ -223,7 +228,8 @@ function WholesalePage() {
           <div className="space-y-1">
             <h3 className="text-sm font-bold text-white">100% EO Gas Sterilized</h3>
             <p className="text-xs text-zinc-400 leading-relaxed">
-              Every single needle cartridge is sealed with ethylene oxide gas indicator strip and sterilized in ISO cleanroom environments.
+              Every single needle cartridge is sealed with ethylene oxide gas indicator strip and
+              sterilized in ISO cleanroom environments.
             </p>
           </div>
         </div>
@@ -233,7 +239,8 @@ function WholesalePage() {
           <div className="space-y-1">
             <h3 className="text-sm font-bold text-white">316L Medical Grade Steel</h3>
             <p className="text-xs text-zinc-400 leading-relaxed">
-              Precision ground needle tapers with zero lead solder. Safety membrane prevents ink backflow into rotary machine grips.
+              Precision ground needle tapers with zero lead solder. Safety membrane prevents ink
+              backflow into rotary machine grips.
             </p>
           </div>
         </div>
@@ -243,14 +250,18 @@ function WholesalePage() {
           <div className="space-y-1">
             <h3 className="text-sm font-bold text-white">Global Express Logistics</h3>
             <p className="text-xs text-zinc-400 leading-relaxed">
-              Same-day tracked courier dispatch from California hub with guaranteed delivery timelines for studio convention dates.
+              Same-day tracked courier dispatch from California hub with guaranteed delivery
+              timelines for studio convention dates.
             </p>
           </div>
         </div>
       </section>
 
       {/* Wholesale Application Form */}
-      <section id="application-form" className="rounded-3xl border border-zinc-800 bg-[#151515] p-6 sm:p-10 space-y-8">
+      <section
+        id="application-form"
+        className="rounded-3xl border border-zinc-800 bg-[#151515] p-6 sm:p-10 space-y-8"
+      >
         <div className="border-b border-zinc-800 pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h2 className="text-2xl font-black text-white uppercase tracking-tight flex items-center gap-2">
@@ -272,9 +283,14 @@ function WholesalePage() {
         {submittedSuccess ? (
           <div className="rounded-2xl border border-emerald-500/20 bg-emerald-950/10 p-8 text-center space-y-4">
             <CheckCircle2 className="h-12 w-12 text-emerald-400 mx-auto" />
-            <h3 className="text-lg font-bold text-white">Thank You for Applying, {formData.ownerName || 'Artist'}!</h3>
+            <h3 className="text-lg font-bold text-white">
+              Thank You for Applying, {formData.ownerName || 'Artist'}!
+            </h3>
             <p className="text-xs text-zinc-400 max-w-lg mx-auto leading-relaxed">
-              We have received your studio wholesale registration for <strong>{formData.studioName || 'Your Studio'}</strong>. Our account team is reviewing your license number and will email your B2B discount code and tier confirmation shortly.
+              We have received your studio wholesale registration for{' '}
+              <strong>{formData.studioName || 'Your Studio'}</strong>. Our account team is reviewing
+              your license number and will email your B2B discount code and tier confirmation
+              shortly.
             </p>
             <div className="pt-2">
               <Link
@@ -324,7 +340,9 @@ function WholesalePage() {
                   type="text"
                   required
                   value={formData.licenseNumber}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, licenseNumber: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, licenseNumber: e.target.value }))
+                  }
                   placeholder="e.g. CA-948192-TAT or Reseller Permit"
                   className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3.5 py-2.5 text-xs text-white focus:border-red-600 focus:outline-none font-mono"
                 />
@@ -378,7 +396,9 @@ function WholesalePage() {
                 </label>
                 <select
                   value={formData.artistsCount}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, artistsCount: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, artistsCount: e.target.value }))
+                  }
                   className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3.5 py-2.5 text-xs text-white focus:border-red-600 focus:outline-none"
                 >
                   <option value="1 artist">1 solo artist</option>
@@ -394,7 +414,9 @@ function WholesalePage() {
                 </label>
                 <select
                   value={formData.monthlyBoxes}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, monthlyBoxes: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, monthlyBoxes: e.target.value }))
+                  }
                   className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3.5 py-2.5 text-xs text-white focus:border-red-600 focus:outline-none"
                 >
                   <option value="20-50 boxes">20 - 50 boxes (Tier 1)</option>
@@ -411,7 +433,9 @@ function WholesalePage() {
                 <input
                   type="text"
                   value={formData.instagramHandle}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, instagramHandle: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, instagramHandle: e.target.value }))
+                  }
                   placeholder="e.g. @blacklotus.tattoo or https://instagram.com/..."
                   className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3.5 py-2.5 text-xs text-white focus:border-red-600 focus:outline-none"
                 />
@@ -424,7 +448,9 @@ function WholesalePage() {
                 <textarea
                   rows={3}
                   value={formData.inquiryNotes}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, inquiryNotes: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, inquiryNotes: e.target.value }))
+                  }
                   placeholder="Let us know if you require specific needle groupings (e.g. #10 03RL, #12 09RM) or Papa machine demo batches..."
                   className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3.5 py-2.5 text-xs text-white focus:border-red-600 focus:outline-none resize-none"
                 />
@@ -433,7 +459,8 @@ function WholesalePage() {
 
             <div className="pt-2 flex items-center justify-between border-t border-zinc-800">
               <span className="text-[11px] text-zinc-500">
-                🔒 Your studio tax license is kept confidential and strictly used for B2B wholesale pricing.
+                🔒 Your studio tax license is kept confidential and strictly used for B2B wholesale
+                pricing.
               </span>
               <button
                 type="submit"

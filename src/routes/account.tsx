@@ -392,7 +392,10 @@ function AccountPage() {
                 {/* Quick Order Chips */}
                 <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-zinc-800/80 text-xs">
                   <span className="text-zinc-500">Live Studio Orders:</span>
-                  {(orders.length > 0 ? orders.slice(0, 5).map((o) => String(o.number)) : ['2', '1']).map((num) => (
+                  {(orders.length > 0
+                    ? orders.slice(0, 5).map((o) => String(o.number))
+                    : ['2', '1']
+                  ).map((num) => (
                     <button
                       key={num}
                       type="button"
@@ -740,7 +743,9 @@ function AccountPage() {
                     )}
                   </button>
                   {saveSuccessMessage && (
-                    <span className="text-xs text-emerald-400 font-medium">Saved to Studio Records</span>
+                    <span className="text-xs text-emerald-400 font-medium">
+                      Saved to Studio Records
+                    </span>
                   )}
                 </div>
               </form>
@@ -756,7 +761,8 @@ function AccountPage() {
                     <span>Studio Address Book</span>
                   </h3>
                   <p className="text-xs text-zinc-400 mt-1">
-                    Verified dispatch destinations for tattoo supplies, needle cartridges and rotary hardware.
+                    Verified dispatch destinations for tattoo supplies, needle cartridges and rotary
+                    hardware.
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
@@ -780,9 +786,12 @@ function AccountPage() {
               {addresses.length === 0 ? (
                 <div className="rounded-xl border border-zinc-800 bg-[#181818] p-8 text-center space-y-3">
                   <MapPin className="h-8 w-8 text-zinc-600 mx-auto" />
-                  <p className="text-sm font-semibold text-zinc-300">No Studio Addresses Registered</p>
+                  <p className="text-sm font-semibold text-zinc-300">
+                    No Studio Addresses Registered
+                  </p>
                   <p className="text-xs text-zinc-500 max-w-sm mx-auto">
-                    Add a studio dispatch address to expedite checkout and automatic shipping calculations.
+                    Add a studio dispatch address to expedite checkout and automatic shipping
+                    calculations.
                   </p>
                   <button
                     type="button"
@@ -830,7 +839,9 @@ function AccountPage() {
                             {addr.fullName}
                           </p>
                           <p className="text-zinc-400">{addr.streetAddress1}</p>
-                          {addr.streetAddress2 && <p className="text-zinc-400">{addr.streetAddress2}</p>}
+                          {addr.streetAddress2 && (
+                            <p className="text-zinc-400">{addr.streetAddress2}</p>
+                          )}
                           <p className="text-zinc-400">
                             {addr.city}, {addr.state} {addr.postalCode}, {addr.country}
                           </p>
@@ -874,7 +885,11 @@ function AccountPage() {
                               type="button"
                               onClick={() => setConfirmDeleteId(addr.id)}
                               disabled={addresses.length === 1}
-                              title={addresses.length === 1 ? 'Cannot delete the sole address' : 'Delete address'}
+                              title={
+                                addresses.length === 1
+                                  ? 'Cannot delete the sole address'
+                                  : 'Delete address'
+                              }
                               className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-800 bg-zinc-900/80 px-3 py-1.5 text-[11px] font-semibold text-zinc-400 hover:text-red-400 hover:border-red-900/50 transition cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
                             >
                               <Trash2 className="h-3 w-3" />
@@ -925,7 +940,9 @@ function AccountPage() {
                     type="text"
                     required
                     value={addressFormData.label}
-                    onChange={(e) => setAddressFormData((prev) => ({ ...prev, label: e.target.value }))}
+                    onChange={(e) =>
+                      setAddressFormData((prev) => ({ ...prev, label: e.target.value }))
+                    }
                     placeholder="e.g. Primary Studio Atelier, Anaheim Guest Spot"
                     className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-white focus:border-[#E50914] focus:outline-none"
                   />
@@ -939,7 +956,9 @@ function AccountPage() {
                     type="text"
                     required
                     value={addressFormData.fullName}
-                    onChange={(e) => setAddressFormData((prev) => ({ ...prev, fullName: e.target.value }))}
+                    onChange={(e) =>
+                      setAddressFormData((prev) => ({ ...prev, fullName: e.target.value }))
+                    }
                     placeholder="e.g. Marcus Vance"
                     className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-white focus:border-[#E50914] focus:outline-none"
                   />
@@ -953,7 +972,9 @@ function AccountPage() {
                     type="text"
                     required
                     value={addressFormData.streetAddress1}
-                    onChange={(e) => setAddressFormData((prev) => ({ ...prev, streetAddress1: e.target.value }))}
+                    onChange={(e) =>
+                      setAddressFormData((prev) => ({ ...prev, streetAddress1: e.target.value }))
+                    }
                     placeholder="e.g. 742 Evergreen Terrace"
                     className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-white focus:border-[#E50914] focus:outline-none"
                   />
@@ -966,7 +987,9 @@ function AccountPage() {
                   <input
                     type="text"
                     value={addressFormData.streetAddress2 || ''}
-                    onChange={(e) => setAddressFormData((prev) => ({ ...prev, streetAddress2: e.target.value }))}
+                    onChange={(e) =>
+                      setAddressFormData((prev) => ({ ...prev, streetAddress2: e.target.value }))
+                    }
                     placeholder="e.g. Suite 204 or Station 3"
                     className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-white focus:border-[#E50914] focus:outline-none"
                   />
@@ -980,7 +1003,9 @@ function AccountPage() {
                     type="text"
                     required
                     value={addressFormData.city}
-                    onChange={(e) => setAddressFormData((prev) => ({ ...prev, city: e.target.value }))}
+                    onChange={(e) =>
+                      setAddressFormData((prev) => ({ ...prev, city: e.target.value }))
+                    }
                     placeholder="e.g. Los Angeles"
                     className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-white focus:border-[#E50914] focus:outline-none"
                   />
@@ -995,7 +1020,9 @@ function AccountPage() {
                       type="text"
                       required
                       value={addressFormData.state}
-                      onChange={(e) => setAddressFormData((prev) => ({ ...prev, state: e.target.value }))}
+                      onChange={(e) =>
+                        setAddressFormData((prev) => ({ ...prev, state: e.target.value }))
+                      }
                       placeholder="e.g. CA"
                       className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-white focus:border-[#E50914] focus:outline-none uppercase"
                     />
@@ -1008,7 +1035,9 @@ function AccountPage() {
                       type="text"
                       required
                       value={addressFormData.postalCode}
-                      onChange={(e) => setAddressFormData((prev) => ({ ...prev, postalCode: e.target.value }))}
+                      onChange={(e) =>
+                        setAddressFormData((prev) => ({ ...prev, postalCode: e.target.value }))
+                      }
                       placeholder="90001"
                       className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-white focus:border-[#E50914] focus:outline-none font-mono"
                     />
@@ -1023,7 +1052,9 @@ function AccountPage() {
                     type="text"
                     required
                     value={addressFormData.country}
-                    onChange={(e) => setAddressFormData((prev) => ({ ...prev, country: e.target.value }))}
+                    onChange={(e) =>
+                      setAddressFormData((prev) => ({ ...prev, country: e.target.value }))
+                    }
                     placeholder="United States"
                     className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-white focus:border-[#E50914] focus:outline-none"
                   />
@@ -1037,7 +1068,9 @@ function AccountPage() {
                     type="tel"
                     required
                     value={addressFormData.phone}
-                    onChange={(e) => setAddressFormData((prev) => ({ ...prev, phone: e.target.value }))}
+                    onChange={(e) =>
+                      setAddressFormData((prev) => ({ ...prev, phone: e.target.value }))
+                    }
                     placeholder="+1 (213) 555-0199"
                     className="w-full rounded-xl border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs text-white focus:border-[#E50914] focus:outline-none"
                   />
@@ -1049,10 +1082,15 @@ function AccountPage() {
                   type="checkbox"
                   id="defaultAddressCheckbox"
                   checked={addressFormData.isDefault}
-                  onChange={(e) => setAddressFormData((prev) => ({ ...prev, isDefault: e.target.checked }))}
+                  onChange={(e) =>
+                    setAddressFormData((prev) => ({ ...prev, isDefault: e.target.checked }))
+                  }
                   className="rounded border-zinc-700 bg-zinc-900 text-[#E50914] focus:ring-[#E50914] h-4 w-4"
                 />
-                <label htmlFor="defaultAddressCheckbox" className="text-xs text-zinc-300 font-medium cursor-pointer">
+                <label
+                  htmlFor="defaultAddressCheckbox"
+                  className="text-xs text-zinc-300 font-medium cursor-pointer"
+                >
                   Set as primary default shipping destination
                 </label>
               </div>

@@ -24,7 +24,8 @@ import {
 export const Route = createFileRoute('/categories/$slug')({
   head: ({ params }) => {
     const category = getCategoryBySlug(params.slug)
-    const name = category?.name || params.slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())
+    const name =
+      category?.name || params.slug.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())
     const title = `${name} | Savage Needles Official Store`
     const description = `Shop authentic ${name} tattoo supplies, needle cartridges, and professional studio equipment at Savage Needles & Papa Supply.`
     return {
@@ -450,8 +451,12 @@ function CategoryPage() {
               {filteredProducts.length > visibleCount && (
                 <div className="pt-6 border-t border-zinc-800 text-center space-y-3">
                   <div className="text-xs text-zinc-400">
-                    Showing <strong className="text-white">{Math.min(visibleCount, filteredProducts.length)}</strong> of{' '}
-                    <strong className="text-white">{filteredProducts.length}</strong> equipment items
+                    Showing{' '}
+                    <strong className="text-white">
+                      {Math.min(visibleCount, filteredProducts.length)}
+                    </strong>{' '}
+                    of <strong className="text-white">{filteredProducts.length}</strong> equipment
+                    items
                   </div>
                   <div className="mx-auto max-w-xs h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
                     <div

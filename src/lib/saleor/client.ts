@@ -1,3 +1,5 @@
+import { executeSaleorGraphQLServerFn } from './server'
+
 export interface SaleorConfig {
   endpoint: string
   channel: string
@@ -11,7 +13,7 @@ const STORAGE_TOKEN_KEY = 'sava_saleor_token_override'
 export function getSaleorConfig(): SaleorConfig {
   let endpoint = 'http://localhost:8005/graphql/'
   let channel = 'default-channel'
-  let token = 'xKr5IbkHh78tS2S6NQCoHpCZV16WGi'
+  let token: string | undefined = undefined
 
   if (typeof window !== 'undefined') {
     const savedEndpoint = localStorage.getItem(STORAGE_ENDPOINT_KEY)
@@ -22,16 +24,6 @@ export function getSaleorConfig(): SaleorConfig {
 
     const savedToken = localStorage.getItem(STORAGE_TOKEN_KEY)
     if (savedToken) token = savedToken
-  } else {
-    if (typeof process !== 'undefined' && process.env?.SALEOR_API_ENDPOINT) {
-      endpoint = process.env.SALEOR_API_ENDPOINT
-    }
-    if (typeof process !== 'undefined' && process.env?.SALEOR_CHANNEL) {
-      channel = process.env.SALEOR_CHANNEL
-    }
-    if (typeof process !== 'undefined' && process.env?.SALEOR_APP_TOKEN) {
-      token = process.env.SALEOR_APP_TOKEN
-    }
   }
 
   return { endpoint, channel, token }
@@ -45,7 +37,7 @@ export function setSaleorConfig(endpoint: string, channel: string, token?: strin
   }
 }
 
-export async function saleorFetch<TData, TVariables = Record<string, any>>({
+export async function saleorFetch<TData, TVariables = Record<string, unknown>>({
   query,
   variables = {} as TVariables,
   headers = {},
@@ -58,6 +50,25 @@ export async function saleorFetch<TData, TVariables = Record<string, any>>({
 }): Promise<{ data?: TData; errors?: Array<{ message: string }> }> {
   const config = getSaleorConfig()
   const endpoint = endpointOverride || config.endpoint
+
+  // Route through TanStack Start Server Function so SALEOR_APP_TOKEN stays strictly server-side
+  try {
+    const serverRes = await executeSaleorGraphQLServerFn({
+      data: {
+        query,
+        variables: (variables || {}) as Record<string, unknown>,
+        endpointOverride: endpoint,
+        channelOverride: config.channel,
+        tokenOverride: config.token,
+      },
+    })
+
+    if (serverRes && (serverRes.data || serverRes.errors)) {
+      return serverRes as { data?: TData; errors?: Array<{ message: string }> }
+    }
+  } catch {
+    // Fallback to direct public fetch if server function is unreachable
+  }
 
   try {
     const res = await fetch(endpoint, {

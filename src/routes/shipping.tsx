@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import {
   AlertTriangle,
   Award,
@@ -39,7 +39,8 @@ function ShippingPolicyPage() {
           Shipping, Warranty & Returns
         </h1>
         <p className="mx-auto max-w-2xl text-sm text-zinc-400">
-          Engineered for professional tattoo studios worldwide. Fast direct dispatch from our Los Angeles Hub with tracked courier delivery.
+          Engineered for professional tattoo studios worldwide. Fast direct dispatch from our Los
+          Angeles Hub with tracked courier delivery.
         </p>
       </div>
 
@@ -51,7 +52,8 @@ function ShippingPolicyPage() {
           </div>
           <h2 className="text-base font-bold text-white">Same-Day Dispatch</h2>
           <p className="text-xs text-zinc-400 leading-relaxed">
-            All orders placed before 3:00 PM PST are verified, pick-and-packed at our Los Angeles fulfillment center, and handed to FedEx/UPS the same business day.
+            All orders placed before 3:00 PM PST are verified, pick-and-packed at our Los Angeles
+            fulfillment center, and handed to FedEx/UPS the same business day.
           </p>
         </div>
 
@@ -61,7 +63,8 @@ function ShippingPolicyPage() {
           </div>
           <h2 className="text-base font-bold text-white">1-Year Studio Warranty</h2>
           <p className="text-xs text-zinc-400 leading-relaxed">
-            All Papa Rotary Pen machines and Critical power stations carry a 1-year manufacturer replacement warranty covering coreless motors and circuit boards.
+            All Papa Rotary Pen machines and Critical power stations carry a 1-year manufacturer
+            replacement warranty covering coreless motors and circuit boards.
           </p>
         </div>
 
@@ -71,7 +74,8 @@ function ShippingPolicyPage() {
           </div>
           <h2 className="text-base font-bold text-white">30-Day Hassle Returns</h2>
           <p className="text-xs text-zinc-400 leading-relaxed">
-            Unopened cartridges in intact blister packaging and undamaged machines can be returned within 30 days of delivery with prepaid return labels provided.
+            Unopened cartridges in intact blister packaging and undamaged machines can be returned
+            within 30 days of delivery with prepaid return labels provided.
           </p>
         </div>
       </div>
@@ -128,11 +132,19 @@ function ShippingPolicyPage() {
               Tattoo Needle Cartridge Bio-Safety Regulation
             </h2>
             <p className="text-xs text-zinc-300 leading-relaxed">
-              Every Savage Needles cartridge is individually sealed in medical-grade blister packaging with ethylene oxide (EO) gas sterilization indicators. In accordance with health department standards and OSHA Bloodborne Pathogens regulations:
+              Every Savage Needles cartridge is individually sealed in medical-grade blister
+              packaging with ethylene oxide (EO) gas sterilization indicators. In accordance with
+              health department standards and OSHA Bloodborne Pathogens regulations:
             </p>
             <ul className="list-disc pl-5 text-xs text-zinc-400 space-y-1">
-              <li>Cartridge boxes with broken blister seals or opened individual wrappers cannot be restocked or returned.</li>
-              <li>Defective needle solder or membrane detachment will be credited or replaced immediately without returning the biohazardous unit.</li>
+              <li>
+                Cartridge boxes with broken blister seals or opened individual wrappers cannot be
+                restocked or returned.
+              </li>
+              <li>
+                Defective needle solder or membrane detachment will be credited or replaced
+                immediately without returning the biohazardous unit.
+              </li>
             </ul>
           </div>
         </div>
@@ -152,7 +164,11 @@ function ShippingPolicyPage() {
             </span>
             <h3 className="text-xs font-bold text-white">Find Your Order</h3>
             <p className="text-[11px] text-zinc-400">
-              Visit your <Link to="/account" className="text-red-400 hover:underline">Studio Customer Portal</Link> and select the relevant order record.
+              Visit your{' '}
+              <Link to="/account" className="text-red-400 hover:underline">
+                Studio Customer Portal
+              </Link>{' '}
+              and select the relevant order record.
             </p>
           </div>
 
@@ -162,7 +178,8 @@ function ShippingPolicyPage() {
             </span>
             <h3 className="text-xs font-bold text-white">Provide Serial or Photos</h3>
             <p className="text-[11px] text-zinc-400">
-              For machines, provide the engraved serial number. For needle inquiries, note the lot number printed on the box.
+              For machines, provide the engraved serial number. For needle inquiries, note the lot
+              number printed on the box.
             </p>
           </div>
 
@@ -172,7 +189,8 @@ function ShippingPolicyPage() {
             </span>
             <h3 className="text-xs font-bold text-white">Prepaid Dispatch</h3>
             <p className="text-[11px] text-zinc-400">
-              Our support team will dispatch a replacement unit or issue a prepaid return shipping slip within 12 business hours.
+              Our support team will dispatch a replacement unit or issue a prepaid return shipping
+              slip within 12 business hours.
             </p>
           </div>
         </div>

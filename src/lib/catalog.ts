@@ -72,7 +72,51 @@ for (const cat of rawCategoriesList) {
   rawCategoriesMap[cat.id] = cat
 }
 
-const allProducts: CatalogProduct[] = catalogData.products as CatalogProduct[]
+interface RawCatalogProduct
+  extends Omit<
+    CatalogProduct,
+    | 'description'
+    | 'short_description'
+    | 'gallery'
+    | 'children'
+    | 'is_visible_individually'
+    | 'is_available'
+  > {
+  desc_idx?: number
+  description?: string
+  short_description?: string
+  gallery?: string[]
+  children?: ProductChildVariant[]
+  is_visible_individually?: boolean
+  is_available?: boolean
+}
+
+const descriptionsTable: string[] = Array.isArray(
+  (catalogData as { descriptions?: string[] }).descriptions,
+)
+  ? (catalogData as { descriptions: string[] }).descriptions
+  : []
+
+const allProducts: CatalogProduct[] = (catalogData.products as unknown as RawCatalogProduct[]).map(
+  (raw) => {
+    const description =
+      typeof raw.desc_idx === 'number'
+        ? (descriptionsTable[raw.desc_idx] ?? '')
+        : (raw.description ?? '')
+    const variants = raw.variants ?? raw.children ?? []
+    return {
+      ...raw,
+      description,
+      short_description: raw.short_description ?? description.slice(0, 220),
+      gallery: raw.gallery?.length ? raw.gallery : raw.image ? [raw.image] : [],
+      variants,
+      children: raw.children ?? variants,
+      special_price: raw.special_price ?? null,
+      is_visible_individually: raw.is_visible_individually ?? true,
+      is_available: raw.is_available ?? true,
+    }
+  },
+)
 
 // Primary categories for Sava
 export const TOP_CATEGORY_IDS = ['98', '50', '96', '97', '51', '93', '78', '70']

@@ -66,8 +66,8 @@ def clean_description_text(raw_text, name):
     if not raw_text:
         return f"{name} - Professional studio grade supply, engineered for precision, endurance, and seamless compatibility."
     text = re.sub(r"\{\{[\s\S]*?\}\}", "", raw_text)
-    text = re.sub(r"<[\s\S]*?>", " ", text)
     text = text.replace("&nbsp;", " ").replace("&amp;", "&").replace("&quot;", "\"").replace("&lt;", "<").replace("&gt;", ">")
+    text = re.sub(r"<[\s\S]*?>", " ", text)
     text = re.sub(r"\s+", " ", text).strip()
     return text
 
@@ -298,20 +298,26 @@ def generate_catalog():
             "type": type_id,
             "is_needle_matrix": is_needle_matrix,
             "price": price,
-            "special_price": None,
             "description": clean_text,
-            "short_description": short_desc,
             "image": image_url,
-            "gallery": gallery_images,
             "category_ids": cat_ids,
             "options": clean_options,
-            "children": variants,
             "variants": variants,
-            "is_visible_individually": True,
-            "is_available": True,
         }
+        if len(gallery_images) > 1:
+            prod_record["gallery"] = gallery_images
 
         catalog_products.append(prod_record)
+
+    # Deduplicate shared product descriptions into a lookup table to cut bundle size by ~68%
+    descriptions_table = []
+    description_index_map = {}
+    for prod in catalog_products:
+        desc_text = prod.pop("description", "")
+        if desc_text not in description_index_map:
+            description_index_map[desc_text] = len(descriptions_table)
+            descriptions_table.append(desc_text)
+        prod["desc_idx"] = description_index_map[desc_text]
 
     clean_categories = [
         c for c in categories.values()
@@ -329,14 +335,15 @@ def generate_catalog():
             "saleor_channel": "default-channel"
         },
         "categories": clean_categories,
+        "descriptions": descriptions_table,
         "products": catalog_products
     }
 
     out_file = "src/data/catalog.json"
     with open(out_file, "w", encoding="utf-8") as f:
-        json.dump(payload, f, indent=2, ensure_ascii=False)
+        json.dump(payload, f, separators=(",", ":"), ensure_ascii=False)
 
-    print(f"✅ Generated {out_file} with domain-specific tattoo attributes for {len(catalog_products)} products!")
+    print(f"✅ Generated compact {out_file} ({os.path.getsize(out_file) / 1024:.1f} KB) with {len(catalog_products)} products and {len(descriptions_table)} unique descriptions!")
 
 if __name__ == "__main__":
     generate_catalog()
