@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Check, ExternalLink, Plus, ShieldCheck, ShoppingBag, Truck, X, Zap } from 'lucide-react'
+import { Check, ExternalLink, Plus, ShoppingBag, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useCart } from '~/lib/cart'
 import type { CatalogProduct, ProductChildVariant } from '~/lib/catalog'
@@ -20,14 +20,12 @@ export function NetflixQuickPreviewModal({ product, onClose }: NetflixQuickPrevi
   const [activeImage, setActiveImage] = useState(product.image)
   const [added, setAdded] = useState(false)
 
-  // Sync state when product changes
   useEffect(() => {
     setSelectedChild(product.children && product.children.length > 0 ? product.children[0] : null)
     setActiveImage(product.image)
     setAdded(false)
   }, [product])
 
-  // ESC key to close
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
@@ -39,6 +37,10 @@ export function NetflixQuickPreviewModal({ product, onClose }: NetflixQuickPrevi
   const currentPrice = selectedChild?.price || product.price
   const currentSku = selectedChild?.sku || product.sku
   const currentName = selectedChild?.name || product.name
+  const isMachine =
+    product.name.toLowerCase().includes('pen') ||
+    product.name.toLowerCase().includes('machine') ||
+    product.name.toLowerCase().includes('rotary')
 
   const handleAdd = () => {
     addItem({
@@ -52,122 +54,121 @@ export function NetflixQuickPreviewModal({ product, onClose }: NetflixQuickPrevi
       quantity: 1,
     })
     setAdded(true)
-    setTimeout(() => setAdded(false), 2000)
+    setTimeout(() => setAdded(false), 1800)
   }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 lg:p-8 overflow-y-auto">
-      {/* Backdrop */}
+      {/* Backdrop with @starting-style entrance */}
       <button
         type="button"
-        className="fixed inset-0 bg-black/85 backdrop-blur-md transition-opacity border-0 cursor-default w-full h-full"
+        className="studio-modal-backdrop fixed inset-0 h-full w-full border-0 bg-black/80 backdrop-blur-md cursor-default"
         onClick={onClose}
         aria-label="Close modal backdrop"
       />
 
-      {/* Modal Dialog Card */}
+      {/* Modal Dialog Card with @starting-style scale(0.96) -> scale(1) */}
       <div
         role="dialog"
         aria-modal="true"
-        className="relative z-10 w-full max-w-4xl overflow-hidden rounded-xl border border-zinc-700 bg-[#181818] text-white shadow-2xl transition-all"
+        aria-label={product.name}
+        className="studio-modal-panel relative z-10 w-full max-w-3xl overflow-hidden rounded-2xl border border-zinc-700/90 bg-[#121215] text-white shadow-2xl shadow-black/80"
       >
         {/* Close Button */}
         <button
           type="button"
           onClick={onClose}
-          className="absolute right-4 top-4 z-30 flex h-9 w-9 items-center justify-center rounded-full bg-black/70 text-zinc-300 hover:bg-white hover:text-black transition cursor-pointer backdrop-blur-md"
+          className="absolute right-4 top-4 z-30 flex h-9 w-9 items-center justify-center rounded-full border border-zinc-700 bg-zinc-900/90 text-zinc-300 cursor-pointer transition-[transform,background-color,color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-white hover:text-zinc-950 active:scale-95"
           aria-label="Close Preview"
         >
-          <X className="h-5 w-5" />
+          <X className="h-4 w-4" />
         </button>
 
-        {/* Hero Banner Area */}
-        <div className="relative aspect-[16/9] sm:aspect-[21/9] w-full bg-zinc-950 overflow-hidden flex items-center justify-center">
-          <div className="absolute inset-0 bg-gradient-to-t from-[#181818] via-transparent to-black/30 z-10" />
-
-          {activeImage ? (
-            <img
-              src={activeImage}
-              alt={currentName}
-              className="h-full w-full object-contain filter contrast-105 p-6"
-            />
-          ) : (
-            <ShoppingBag className="h-16 w-16 text-zinc-800" />
-          )}
-
-          {/* Quick Floating Title on Banner */}
-          <div className="absolute bottom-6 left-6 right-6 z-20 space-y-2">
-            <span className="inline-block rounded bg-[#E50914] px-2 py-0.5 text-[10px] font-black tracking-wider text-white uppercase">
-              STUDIO EDITION
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight line-clamp-1 drop-shadow-md">
-              {product.name}
-            </h2>
+        {/* Top Split Header & Optical Stage */}
+        <div className="grid grid-cols-1 sm:grid-cols-12 border-b border-zinc-800/90">
+          <div className="sm:col-span-5 flex items-center justify-center bg-white p-6">
+            {activeImage ? (
+              <img src={activeImage} alt={currentName} className="max-h-52 w-full object-contain" />
+            ) : (
+              <ShoppingBag className="h-14 w-14 text-zinc-400" />
+            )}
           </div>
-        </div>
 
-        {/* Content Body */}
-        <div className="p-6 sm:p-8 space-y-6">
-          {/* Main Controls Row: Price & Actions */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800 pb-6">
-            <div>
-              <div className="flex items-baseline gap-3">
-                <span className="text-3xl font-black text-white">{formatPrice(currentPrice)}</span>
-                {product.special_price && (
-                  <span className="text-base text-zinc-500 line-through">
-                    {formatPrice(product.special_price)}
-                  </span>
-                )}
-                <span className="text-xs font-semibold text-emerald-400">
-                  In Stock & Ready to Ship
+          <div className="sm:col-span-7 flex flex-col justify-between p-6 space-y-4">
+            <div className="space-y-2">
+              <div className="inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-wider text-zinc-400">
+                <span className="rounded bg-[#E50914] px-1.5 py-0.5 font-bold text-white">
+                  SPEC SHEET
                 </span>
+                <span>SKU {currentSku}</span>
               </div>
-              <p className="text-xs text-zinc-400 font-mono mt-1">
-                SKU: <span className="text-zinc-200">{currentSku}</span>
+              <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
+                {product.name}
+              </h2>
+              <p className="text-xs leading-relaxed text-zinc-400 line-clamp-3">
+                {product.short_description ||
+                  product.description ||
+                  'Professional studio hardware engineered for high stability, clean needle drive, and low skin trauma.'}
               </p>
             </div>
 
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={handleAdd}
-                className={`flex items-center gap-2 rounded-lg px-6 py-3 text-xs font-black transition cursor-pointer ${
-                  added
-                    ? 'bg-emerald-500 text-black'
-                    : 'bg-white text-black hover:bg-white/90 active:scale-95'
-                }`}
-              >
-                {added ? (
-                  <>
-                    <Check className="h-4 w-4 stroke-[3]" />
-                    <span>Added to Cart</span>
-                  </>
-                ) : (
-                  <>
-                    <Plus className="h-4 w-4 stroke-[3]" />
-                    <span>Add to Bag</span>
-                  </>
-                )}
-              </button>
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-zinc-800/80">
+              <div>
+                <span className="font-mono text-2xl font-black text-white tabular-nums">
+                  {formatPrice(currentPrice)}
+                </span>
+                <span className="block font-mono text-[10px] font-semibold text-emerald-400">
+                  In Stock • LA Hub
+                </span>
+              </div>
 
-              <Link
-                to="/products/$slug"
-                params={{ slug: product.slug }}
-                className="flex items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-800/80 px-4 py-3 text-xs font-bold text-zinc-200 hover:bg-zinc-700 hover:text-white transition"
-              >
-                <span>Full Details</span>
-                <ExternalLink className="h-3.5 w-3.5" />
-              </Link>
+              <div className="flex items-center gap-2.5">
+                <button
+                  type="button"
+                  onClick={handleAdd}
+                  className={`inline-flex items-center gap-1.5 rounded-xl px-5 py-2.5 text-xs font-bold cursor-pointer transition-[transform,background-color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97] ${
+                    added
+                      ? 'bg-emerald-500 text-zinc-950'
+                      : 'bg-white text-zinc-950 hover:bg-zinc-200'
+                  }`}
+                >
+                  {added ? (
+                    <>
+                      <Check className="h-4 w-4 stroke-[2.5]" />
+                      <span>Added to Bag</span>
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="h-4 w-4 stroke-[2.5]" />
+                      <span>Add to Studio Bag</span>
+                    </>
+                  )}
+                </button>
+
+                <Link
+                  to="/products/$slug"
+                  params={{ slug: product.slug }}
+                  onClick={onClose}
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-zinc-700 bg-zinc-900 px-3.5 py-2.5 text-xs font-semibold text-zinc-200 transition-colors duration-150 hover:border-zinc-500 hover:text-white"
+                >
+                  <span>Full Page</span>
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </Link>
+              </div>
             </div>
           </div>
+        </div>
 
-          {/* Child Variants / Options Selector if available */}
-          {product.children && product.children.length > 0 && (
-            <div className="space-y-3">
-              <label className="text-xs font-bold uppercase tracking-wider text-zinc-400">
-                Select Configuration / Variant ({product.children.length} options)
-              </label>
-              <div className="flex flex-wrap gap-2 max-h-36 overflow-y-auto pr-1">
+        {/* Lower Telemetry & Variant Selector */}
+        <div className="p-6 space-y-5">
+          {product.children && product.children.length > 1 && (
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-zinc-400">
+                  Select Studio Configuration ({product.children.length} Variants)
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto pr-1">
                 {product.children.map((child) => {
                   const isSelected = selectedChild?.id === child.id
                   return (
@@ -175,14 +176,14 @@ export function NetflixQuickPreviewModal({ product, onClose }: NetflixQuickPrevi
                       key={child.id}
                       type="button"
                       onClick={() => setSelectedChild(child)}
-                      className={`rounded-md px-3 py-1.5 text-xs font-medium transition cursor-pointer border ${
+                      className={`rounded-lg px-2.5 py-1.5 font-mono text-xs cursor-pointer border transition-[transform,border-color,background-color,color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-95 ${
                         isSelected
-                          ? 'border-amber-400 bg-amber-400/10 text-amber-300 font-bold'
+                          ? 'border-[#E50914] bg-[#E50914]/15 text-white font-bold'
                           : 'border-zinc-800 bg-zinc-900 text-zinc-300 hover:border-zinc-600 hover:text-white'
                       }`}
                     >
-                      <span>{child.name}</span>
-                      <span className="ml-1.5 text-zinc-500 font-mono">${child.price}</span>
+                      <span>{child.code || child.label || child.name}</span>
+                      <span className="ml-1.5 text-zinc-500 tabular-nums">${child.price}</span>
                     </button>
                   )
                 })}
@@ -190,39 +191,32 @@ export function NetflixQuickPreviewModal({ product, onClose }: NetflixQuickPrevi
             </div>
           )}
 
-          {/* Studio Specs & Quality Assurance Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs pt-2">
-            <div className="rounded-lg border border-zinc-800/80 bg-zinc-900/50 p-3">
-              <span className="text-zinc-500 block text-[10px] uppercase font-bold">
-                Motor Type
+          {/* Dynamic Spec Grid based on Product Type */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 font-mono text-xs">
+            <div className="rounded-xl border border-zinc-800/90 bg-zinc-900/60 p-3">
+              <span className="block text-[10px] uppercase text-zinc-500">
+                {isMachine ? 'Motor Spec' : 'Metallurgy'}
               </span>
-              <span className="text-zinc-200 font-medium">Custom Coreless</span>
-            </div>
-            <div className="rounded-lg border border-zinc-800/80 bg-zinc-900/50 p-3">
-              <span className="text-zinc-500 block text-[10px] uppercase font-bold">
-                Stroke Spec
+              <span className="mt-0.5 block font-bold text-zinc-200">
+                {isMachine ? 'Japan Coreless' : '316L Surgical Steel'}
               </span>
-              <span className="text-zinc-200 font-medium">4.0mm / Adjustable</span>
             </div>
-            <div className="rounded-lg border border-zinc-800/80 bg-zinc-900/50 p-3">
-              <span className="text-zinc-500 block text-[10px] uppercase font-bold">
-                Needle System
+            <div className="rounded-xl border border-zinc-800/90 bg-zinc-900/60 p-3">
+              <span className="block text-[10px] uppercase text-zinc-500">
+                {isMachine ? 'Stroke Length' : 'Sterilization'}
               </span>
-              <span className="text-zinc-200 font-medium">Universal Cartridge</span>
+              <span className="mt-0.5 block font-bold text-zinc-200">
+                {isMachine ? '4.0mm Direct' : '100% E.O. Gas'}
+              </span>
             </div>
-            <div className="rounded-lg border border-zinc-800/80 bg-zinc-900/50 p-3">
-              <span className="text-zinc-500 block text-[10px] uppercase font-bold">Warranty</span>
-              <span className="text-emerald-400 font-medium">1-Year Studio Cover</span>
+            <div className="rounded-xl border border-zinc-800/90 bg-zinc-900/60 p-3">
+              <span className="block text-[10px] uppercase text-zinc-500">Compatibility</span>
+              <span className="mt-0.5 block font-bold text-zinc-200">Universal Twist</span>
             </div>
-          </div>
-
-          {/* Description Snippet */}
-          <div className="text-xs leading-relaxed text-zinc-400">
-            <p className="line-clamp-4">
-              {product.short_description ||
-                product.description ||
-                'Professional grade tattoo hardware crafted for high stability, clean needle drive, and low skin trauma.'}
-            </p>
+            <div className="rounded-xl border border-zinc-800/90 bg-zinc-900/60 p-3">
+              <span className="block text-[10px] uppercase text-zinc-500">Studio QC</span>
+              <span className="mt-0.5 block font-bold text-emerald-400">LA Hub Verified</span>
+            </div>
           </div>
         </div>
       </div>

@@ -90,7 +90,7 @@ export function Header() {
             </Link>
 
             {/* Desktop Top Navigation */}
-            <nav className="hidden lg:flex items-center gap-5">
+            <nav className="hidden lg:flex items-center gap-3.5 xl:gap-5">
               <Link
                 to="/"
                 className="text-xs font-bold uppercase tracking-wider text-zinc-300 transition-colors hover:text-white whitespace-nowrap"
@@ -117,7 +117,7 @@ export function Header() {
               <Link
                 to="/categories/$slug"
                 params={{ slug: 'papa-cartridges' }}
-                className="text-xs font-semibold uppercase tracking-wider text-zinc-400 transition-colors hover:text-white whitespace-nowrap"
+                className="hidden xl:inline-block text-xs font-semibold uppercase tracking-wider text-zinc-400 transition-colors hover:text-white whitespace-nowrap"
                 activeProps={{ className: 'text-white font-bold' }}
               >
                 Papa Cartridges
@@ -128,7 +128,7 @@ export function Header() {
                 className="text-xs font-semibold uppercase tracking-wider text-zinc-400 transition-colors hover:text-white whitespace-nowrap"
                 activeProps={{ className: 'text-white font-bold' }}
               >
-                Grips & Accessories
+                Grips & Gear
               </Link>
 
               <Link
@@ -136,12 +136,12 @@ export function Header() {
                 className="text-xs font-semibold uppercase tracking-wider text-zinc-400 transition-colors hover:text-white whitespace-nowrap"
                 activeProps={{ className: 'text-white font-bold' }}
               >
-                Wholesale Tiers
+                Wholesale
               </Link>
 
               <Link
                 to="/saleor"
-                className="flex items-center gap-1.5 rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1 text-xs font-semibold text-red-400 hover:bg-red-500/20 hover:border-red-400 transition whitespace-nowrap"
+                className="flex items-center gap-1.5 rounded-full border border-red-500/30 bg-red-500/10 px-2.5 py-1 text-xs font-semibold text-red-400 hover:bg-red-500/20 hover:border-red-400 transition whitespace-nowrap"
                 activeProps={{ className: 'border-red-400 bg-red-500/25 text-white' }}
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />

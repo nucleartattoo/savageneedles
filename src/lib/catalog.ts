@@ -251,28 +251,45 @@ export function searchProducts(query: string, limit = 20): CatalogProduct[] {
 
 export function getHeroProduct(): CatalogProduct {
   const hero =
-    allProducts.find(
-      (p) =>
-        p.image &&
-        (p.name.toLowerCase().includes('papa pen v3') ||
-          p.name.toLowerCase().includes('papa adjustable') ||
-          p.name.toLowerCase().includes('savage tattoo needle')),
-    ) || allProducts[0]
+    allProducts.find((p) => p.sku === 'BNC-03') ||
+    allProducts.find((p) => p.image && p.name.toLowerCase().includes('papa pen v3')) ||
+    allProducts[0]
   return hero
 }
 
 export function getTop10Products(): CatalogProduct[] {
-  return allProducts
-    .filter(
-      (p) =>
-        p.image &&
-        p.price > 0 &&
-        (p.name.toLowerCase().includes('papa') ||
-          p.name.toLowerCase().includes('savage') ||
-          p.name.toLowerCase().includes('cartridge') ||
-          p.name.toLowerCase().includes('grip')),
-    )
-    .slice(0, 10)
+  const flagshipSkus = [
+    'BNC-03',
+    'PEN-V3-BLK-FULLSET',
+    'PPDCG',
+    'PPT-BLU',
+    'P-PEN-PUR',
+    'P-PEN-BLK',
+    'CP1401RL',
+    'C1203RL',
+    'C1205RL',
+    'C1207RL',
+  ]
+  const picked: CatalogProduct[] = []
+  const seenIds = new Set<string>()
+
+  for (const sku of flagshipSkus) {
+    const match = allProducts.find((p) => p.sku === sku && p.image && p.price > 0)
+    if (match && !seenIds.has(match.id)) {
+      picked.push(match)
+      seenIds.add(match.id)
+    }
+  }
+
+  for (const p of allProducts) {
+    if (picked.length >= 10) break
+    if (p.image && p.price > 0 && !seenIds.has(p.id)) {
+      picked.push(p)
+      seenIds.add(p.id)
+    }
+  }
+
+  return picked
 }
 
 export function getWirelessMachines(limit = 12): CatalogProduct[] {

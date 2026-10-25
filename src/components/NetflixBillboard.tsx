@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router'
-import { Check, Info, Play, ShoppingBag, Sparkles, Star, Zap } from 'lucide-react'
+import { ArrowUpRight, Check, Crosshair, Layers, ShieldCheck, ShoppingBag } from 'lucide-react'
 import { useState } from 'react'
 import { useCart } from '~/lib/cart'
 import type { CatalogProduct } from '~/lib/catalog'
-import { cleanDescription, formatPrice } from '~/lib/utils'
+import { formatPrice } from '~/lib/utils'
 
 interface NetflixBillboardProps {
   product: CatalogProduct
@@ -13,6 +13,15 @@ interface NetflixBillboardProps {
 export function NetflixBillboard({ product, onOpenPreview }: NetflixBillboardProps) {
   const { addItem } = useCart()
   const [added, setAdded] = useState(false)
+  const gallery = product.gallery?.length ? product.gallery : product.image ? [product.image] : []
+  const [activeImgIdx, setActiveImgIdx] = useState(0)
+
+  const currentImage = gallery[activeImgIdx] || product.image
+  const variantCount = product.variants?.length || 1
+  const isMachine =
+    product.name.toLowerCase().includes('pen') ||
+    product.name.toLowerCase().includes('machine') ||
+    product.name.toLowerCase().includes('rotary')
 
   const handleQuickAdd = () => {
     addItem({
@@ -21,138 +30,199 @@ export function NetflixBillboard({ product, onOpenPreview }: NetflixBillboardPro
       sku: product.sku,
       name: product.name,
       price: product.price,
-      image: product.image,
+      image: currentImage,
       options: [],
       quantity: 1,
     })
     setAdded(true)
-    setTimeout(() => setAdded(false), 2000)
+    setTimeout(() => setAdded(false), 1800)
   }
 
   return (
-    <div className="relative w-full overflow-hidden bg-[#141414] text-white">
-      {/* Background Ambient Glow & Spotlight Vignette */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#141414] via-[#141414]/80 to-transparent z-10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-black/40 z-10" />
-        <div className="absolute -right-10 top-0 h-full w-2/3 bg-radial from-amber-500/10 via-rose-500/5 to-transparent blur-3xl opacity-70" />
+    <section className="relative w-full overflow-hidden border-b border-zinc-800/80 bg-[#09090b] bg-studio-grid text-zinc-100">
+      {/* Subtle Industrial Radial Lighting (Single Accent Rule: Savage Crimson) */}
+      <div
+        className="pointer-events-none absolute -top-32 right-1/4 h-[460px] w-[460px] rounded-full bg-[#E50914]/8 blur-[120px]"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-[#09090b]/40 to-[#09090b]"
+        aria-hidden="true"
+      />
 
-        {/* Cinematic Backdrop Image */}
-        {product.image && (
-          <img
-            src={product.image}
-            alt={product.name}
-            className="absolute right-0 top-0 h-full w-3/5 object-cover object-center opacity-45 mix-blend-lighten filter brightness-90 contrast-110"
-          />
-        )}
-      </div>
-
-      {/* Billboard Content */}
-      <div className="relative z-20 mx-auto max-w-7xl px-4 pt-20 pb-28 sm:px-6 sm:pt-28 sm:pb-36 lg:px-8">
-        <div className="max-w-2xl space-y-6">
-          {/* Top Badge: Netflix Red Ranking / Series Label */}
-          <div className="flex items-center gap-3">
-            <span className="flex items-center gap-1.5 rounded bg-red-600 px-2.5 py-0.5 text-[11px] font-black tracking-wider uppercase text-white shadow-lg shadow-red-900/40">
-              <Zap className="h-3 w-3 fill-current" /> SAVAGE EXCLUSIVE
-            </span>
-            <div className="flex items-center gap-1.5 text-xs font-bold text-zinc-300">
-              <span className="flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-white text-[9px] font-black">
-                ★
+      <div className="relative z-10 mx-auto max-w-7xl px-4 pt-8 pb-12 sm:px-6 lg:px-8 lg:pt-12 lg:pb-16">
+        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-12">
+          {/* Left Column (7 cols): Surgical Hardware Typography & Telemetry */}
+          <div className="lg:col-span-7 space-y-6">
+            {/* 1. Eyebrow (Max 1 per Hero Stack Discipline) */}
+            <div className="inline-flex flex-wrap items-center gap-2.5 rounded-full border border-zinc-800 bg-zinc-900/90 px-3.5 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
+              <span className="h-2 w-2 rounded-full bg-[#E50914]" />
+              <span className="font-mono text-[11px] font-bold uppercase tracking-[0.14em] text-zinc-200">
+                ISO-13485 Studio Hardware
               </span>
-              <span>#1 in Precision Needles & Machines</span>
+              <span className="text-zinc-700">/</span>
+              <span className="font-mono text-[11px] text-zinc-400">SKU {product.sku}</span>
+            </div>
+
+            {/* 2. Headline (Max 2 lines on desktop, tight tracking) */}
+            <h1 className="text-4xl font-black tracking-tighter text-white sm:text-5xl lg:text-6xl leading-[0.98] line-clamp-2">
+              {product.name}
+            </h1>
+
+            {/* 3. Subtext (Max 20 words, high legibility) */}
+            <p className="max-w-xl text-sm leading-relaxed text-zinc-400 sm:text-base">
+              Engineered in Los Angeles for zero-rebound needle stabilization, surgical membrane
+              sealing, and relentless multi-hour tattoo session consistency.
+            </p>
+
+            {/* Telemetry Readout Grid (Tabular Monospace Numbers) */}
+            <div className="grid grid-cols-3 gap-3 max-w-lg rounded-xl border border-zinc-800/90 bg-zinc-900/60 p-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+              <div>
+                <span className="block font-mono text-[10px] uppercase tracking-wider text-zinc-500">
+                  Studio Price
+                </span>
+                <div className="mt-0.5 flex items-baseline gap-2">
+                  <span className="font-mono text-xl sm:text-2xl font-black text-white tabular-nums">
+                    {formatPrice(product.price)}
+                  </span>
+                  {product.special_price && (
+                    <span className="font-mono text-xs text-zinc-500 line-through tabular-nums">
+                      {formatPrice(product.special_price)}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="border-l border-zinc-800 pl-3">
+                <span className="block font-mono text-[10px] uppercase tracking-wider text-zinc-500">
+                  {isMachine ? 'Drive System' : 'Sterilization'}
+                </span>
+                <span className="mt-1 block font-mono text-xs sm:text-sm font-bold text-zinc-200">
+                  {isMachine ? 'Coreless 4.0mm' : 'E.O. Gas + 316L'}
+                </span>
+              </div>
+
+              <div className="border-l border-zinc-800 pl-3">
+                <span className="block font-mono text-[10px] uppercase tracking-wider text-zinc-500">
+                  Availability
+                </span>
+                <span className="mt-1 flex items-center gap-1.5 font-mono text-xs sm:text-sm font-bold text-emerald-400">
+                  <span>{variantCount > 1 ? `${variantCount} Specs` : 'LA Hub Ready'}</span>
+                </span>
+              </div>
+            </div>
+
+            {/* 4. Primary & Secondary CTAs (Emil Kowalski tactile press scale-[0.97]) */}
+            <div className="flex flex-wrap items-center gap-3 pt-1">
+              <button
+                type="button"
+                onClick={handleQuickAdd}
+                className={`inline-flex items-center gap-2.5 rounded-xl px-6 py-3.5 text-sm font-bold cursor-pointer transition-[transform,background-color,color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97] ${
+                  added
+                    ? 'bg-emerald-500 text-zinc-950'
+                    : 'bg-white text-zinc-950 hover:bg-zinc-200 shadow-lg shadow-black/40'
+                }`}
+              >
+                {added ? (
+                  <>
+                    <Check className="h-4 w-4 stroke-[2.5]" />
+                    <span>Added to Studio Bag</span>
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag className="h-4 w-4 stroke-[2.2]" />
+                    <span>Add to Studio Bag</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={() => onOpenPreview(product)}
+                className="inline-flex items-center gap-2 rounded-xl border border-zinc-700/80 bg-zinc-900/90 px-5 py-3.5 text-sm font-semibold text-zinc-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] cursor-pointer transition-[transform,background-color,border-color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:border-zinc-500 hover:bg-zinc-800 active:scale-[0.97]"
+              >
+                <Layers className="h-4 w-4 text-zinc-400" />
+                <span>Inspect Spec Sheet</span>
+              </button>
+
+              <Link
+                to="/products/$slug"
+                params={{ slug: product.slug }}
+                className="inline-flex items-center gap-1 px-2 py-2 text-xs font-mono font-semibold text-zinc-400 transition-colors duration-150 hover:text-white"
+              >
+                <span>Open Full Matrix</span>
+                <ArrowUpRight className="h-3.5 w-3.5" />
+              </Link>
             </div>
           </div>
 
-          {/* Cinematic Title */}
-          <h1 className="text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl uppercase leading-none drop-shadow-md">
-            {product.name}
-          </h1>
+          {/* Right Column (5 cols): Optical Hardware Stage */}
+          <div className="lg:col-span-5">
+            <div className="relative overflow-hidden rounded-2xl border border-zinc-800/90 bg-zinc-900/50 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-md">
+              {/* Top Optical Stage Telemetry Header */}
+              <div className="mb-3 flex items-center justify-between border-b border-zinc-800/80 pb-2.5 font-mono text-[10px] text-zinc-400">
+                <span className="flex items-center gap-1.5">
+                  <Crosshair className="h-3.5 w-3.5 text-[#E50914]" />
+                  <span>OPTICAL INSPECTION STAGE</span>
+                </span>
+                <span className="rounded bg-zinc-800 px-1.5 py-0.5 text-zinc-300">
+                  {activeImgIdx + 1}/{Math.max(gallery.length, 1)}
+                </span>
+              </div>
 
-          {/* Specs Highlights Pill Bar */}
-          <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
-            <span className="rounded border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 font-bold text-emerald-400">
-              98% Recommended
-            </span>
-            <span className="rounded border border-zinc-700 bg-zinc-800/80 px-2 py-0.5 font-mono text-zinc-300">
-              4.0mm Stroke
-            </span>
-            <span className="rounded border border-zinc-700 bg-zinc-800/80 px-2 py-0.5 font-mono text-zinc-300">
-              Japan Coreless Motor
-            </span>
-            <span className="rounded border border-zinc-700 bg-zinc-800/80 px-2 py-0.5 font-mono text-zinc-300">
-              2400mAh Li-ion
-            </span>
-            <span className="rounded border border-red-500/40 bg-red-500/10 px-1.5 py-0.5 text-[10px] font-bold text-red-400 uppercase">
-              18+ Pro Studio
-            </span>
-          </div>
+              {/* Main Product Stage with Soft Studio Backlight */}
+              <Link
+                to="/products/$slug"
+                params={{ slug: product.slug }}
+                className="group relative flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-xl bg-white p-6 shadow-inner"
+              >
+                {currentImage ? (
+                  <img
+                    src={currentImage}
+                    alt={product.name}
+                    className="h-full w-full object-contain transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-105"
+                  />
+                ) : (
+                  <ShoppingBag className="h-12 w-12 text-zinc-400" />
+                )}
 
-          {/* Description */}
-          <p className="text-sm leading-relaxed text-zinc-300 sm:text-base line-clamp-3 max-w-xl">
-            {cleanDescription(product.short_description) ||
-              cleanDescription(product.description) ||
-              'Precision engineered for relentless studio endurance and ergonomic stability. Fully compatible with all major cartridge needles and rotary machines.'}
-          </p>
+                <span className="absolute bottom-2.5 right-2.5 rounded-md bg-zinc-950/85 px-2 py-1 font-mono text-[10px] font-semibold text-zinc-200 backdrop-blur-xs">
+                  {isMachine ? 'CNC AIRCRAFT AL-6061' : '316L SURGICAL MEMBRANE'}
+                </span>
+              </Link>
 
-          {/* Price Bar */}
-          <div className="flex items-baseline gap-3 pt-2">
-            <span className="text-3xl font-black text-white">{formatPrice(product.price)}</span>
-            {product.special_price && (
-              <span className="text-base text-zinc-500 line-through">
-                {formatPrice(product.special_price)}
-              </span>
-            )}
-            <span className="text-xs text-amber-400 font-semibold uppercase tracking-wider">
-              Free Express Shipping Included
-            </span>
-          </div>
-
-          {/* Action CTAs: Netflix "Play" & "More Info" Style */}
-          <div className="flex flex-wrap items-center gap-3 pt-4">
-            <button
-              type="button"
-              onClick={handleQuickAdd}
-              className={`flex items-center gap-2.5 rounded-md px-7 py-3 text-sm font-bold transition duration-200 cursor-pointer ${
-                added
-                  ? 'bg-emerald-500 text-black'
-                  : 'bg-white text-black hover:bg-white/90 active:scale-95'
-              }`}
-            >
-              {added ? (
-                <>
-                  <Check className="h-5 w-5 stroke-[2.5]" />
-                  <span>Added to Bag!</span>
-                </>
+              {/* Multi-Angle Thumbnail Selector (if product has multiple gallery images) */}
+              {gallery.length > 1 ? (
+                <div className="mt-3 flex items-center gap-2 overflow-x-auto pb-1">
+                  {gallery.slice(0, 5).map((imgUrl, idx) => (
+                    <button
+                      key={imgUrl}
+                      type="button"
+                      onClick={() => setActiveImgIdx(idx)}
+                      aria-label={`Inspect angle ${idx + 1}`}
+                      className={`relative h-12 w-12 shrink-0 overflow-hidden rounded-lg border bg-white p-1 cursor-pointer transition-[transform,border-color,opacity] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-95 ${
+                        activeImgIdx === idx
+                          ? 'border-[#E50914] ring-1 ring-[#E50914] opacity-100'
+                          : 'border-zinc-700 opacity-65 hover:opacity-100'
+                      }`}
+                    >
+                      <img src={imgUrl} alt="" className="h-full w-full object-contain" />
+                    </button>
+                  ))}
+                </div>
               ) : (
-                <>
-                  <Play className="h-4 w-4 fill-black stroke-none" />
-                  <span>Quick Order Now</span>
-                </>
+                <div className="mt-3 flex items-center justify-between text-[11px] text-zinc-400 font-mono">
+                  <span className="flex items-center gap-1.5 text-zinc-300">
+                    <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
+                    <span>Zero-Solder Defect QC Passed</span>
+                  </span>
+                  <span>20 Pcs / Sterile Blister</span>
+                </div>
               )}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => onOpenPreview(product)}
-              className="flex items-center gap-2 rounded-md bg-zinc-700/80 px-6 py-3 text-sm font-bold text-white backdrop-blur-md transition duration-200 hover:bg-zinc-600/80 active:scale-95 cursor-pointer"
-            >
-              <Info className="h-5 w-5 text-zinc-300" />
-              <span>More Specs & Media</span>
-            </button>
-
-            <Link
-              to="/products/$slug"
-              params={{ slug: product.slug }}
-              className="text-xs font-semibold text-zinc-400 hover:text-white transition ml-2 underline underline-offset-4"
-            >
-              Full Product Detail Page →
-            </Link>
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Bottom Fade Gradient for Seamless Transition into Shelf Rows */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#141414] to-transparent pointer-events-none" />
-    </div>
+    </section>
   )
 }

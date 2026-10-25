@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Check, ChevronLeft, ChevronRight, Eye, Plus, ShoppingBag, Sparkles } from 'lucide-react'
+import { Check, ChevronLeft, ChevronRight, Eye, Plus, ShoppingBag } from 'lucide-react'
 import { useRef, useState } from 'react'
 import { useCart } from '~/lib/cart'
 import type { CatalogProduct } from '~/lib/catalog'
@@ -12,6 +12,28 @@ interface NetflixRowProps {
   products: CatalogProduct[]
   isRanked?: boolean
   onOpenPreview: (product: CatalogProduct) => void
+}
+
+function getHardwareClassification(name: string): string {
+  const lower = name.toLowerCase()
+  if (
+    lower.includes('liner') ||
+    lower.includes('shader') ||
+    lower.includes('magnum') ||
+    lower.includes('cartridge')
+  ) {
+    return '316L E.O. Sterile'
+  }
+  if (lower.includes('pen') || lower.includes('machine') || lower.includes('rotary')) {
+    return 'CNC Rotary Drive'
+  }
+  if (lower.includes('power') || lower.includes('battery') || lower.includes('volt')) {
+    return 'Regulated Power'
+  }
+  if (lower.includes('grip')) {
+    return 'Autoclave Grip'
+  }
+  return 'Studio Spec'
 }
 
 export function NetflixRow({
@@ -27,6 +49,7 @@ export function NetflixRow({
   const [canScrollRight, setCanScrollRight] = useState(true)
   const { addItem } = useCart()
   const [addedSku, setAddedSku] = useState<string | null>(null)
+  const [failedImages, setFailedImages] = useState<Record<string, boolean>>({})
 
   const checkScroll = () => {
     if (!rowRef.current) return
@@ -42,7 +65,7 @@ export function NetflixRow({
       left: direction === 'left' ? -offset : offset,
       behavior: 'smooth',
     })
-    setTimeout(checkScroll, 350)
+    setTimeout(checkScroll, 300)
   }
 
   const handleQuickAdd = (e: React.MouseEvent, product: CatalogProduct) => {
@@ -65,29 +88,29 @@ export function NetflixRow({
   if (!products || products.length === 0) return null
 
   return (
-    <div className="relative group/row space-y-3 px-4 sm:px-6 lg:px-8">
+    <div className="relative group/row mx-auto max-w-7xl space-y-4 px-4 sm:px-6 lg:px-8">
       {/* Row Header */}
-      <div className="flex items-baseline justify-between">
+      <div className="flex items-end justify-between border-b border-zinc-800/80 pb-3">
         <div>
-          <h2 className="text-lg sm:text-xl font-bold tracking-tight text-zinc-100 flex items-center gap-2">
-            <span>{title}</span>
+          <div className="flex items-center gap-2.5">
+            <h2 className="text-lg sm:text-xl font-black tracking-tight text-zinc-100">{title}</h2>
             {isRanked && (
-              <span className="text-[10px] uppercase font-black tracking-wider text-[#E50914] bg-red-500/10 border border-red-500/30 px-1.5 py-0.5 rounded">
-                TOP 10
+              <span className="rounded border border-[#E50914]/40 bg-[#E50914]/10 px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-wider text-[#E50914]">
+                Dispatch Volume Top 10
               </span>
             )}
-          </h2>
-          {subtitle && <p className="text-xs text-zinc-400 mt-0.5">{subtitle}</p>}
+          </div>
+          {subtitle && <p className="mt-0.5 text-xs text-zinc-400">{subtitle}</p>}
         </div>
 
         {categorySlug && (
           <Link
             to="/categories/$slug"
             params={{ slug: categorySlug }}
-            className="text-xs font-semibold text-zinc-400 hover:text-white transition flex items-center gap-1 group/more"
+            className="inline-flex items-center gap-1 font-mono text-xs font-semibold text-zinc-400 transition-colors duration-150 hover:text-white group/more"
           >
-            <span>Explore All</span>
-            <ChevronRight className="h-3 w-3 group-hover/more:translate-x-0.5 transition" />
+            <span>View Full Line</span>
+            <ChevronRight className="h-3.5 w-3.5 transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover/more:translate-x-0.5" />
           </Link>
         )}
       </div>
@@ -99,10 +122,10 @@ export function NetflixRow({
           <button
             type="button"
             onClick={() => scroll('left')}
-            className="absolute left-0 top-0 bottom-0 z-30 w-10 sm:w-12 bg-black/70 hover:bg-black/90 backdrop-blur-xs flex items-center justify-center text-white transition duration-200 opacity-0 group-hover/row:opacity-100 cursor-pointer"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-30 flex h-11 w-11 items-center justify-center rounded-full border border-zinc-700 bg-zinc-950/90 text-white shadow-xl backdrop-blur-md cursor-pointer transition-[transform,opacity,background-color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] opacity-0 group-hover/row:opacity-100 hover:bg-zinc-800 active:scale-95"
             aria-label="Scroll Left"
           >
-            <ChevronLeft className="h-7 w-7 text-white" />
+            <ChevronLeft className="h-5 w-5 text-white" />
           </button>
         )}
 
@@ -110,59 +133,61 @@ export function NetflixRow({
         <div
           ref={rowRef}
           onScroll={checkScroll}
-          className="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth py-3"
+          className="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth py-2"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {products.map((product, idx) => {
             const isAdded = addedSku === product.sku
+            const specLabel = getHardwareClassification(product.name)
+            const rankStr = String(idx + 1).padStart(2, '0')
+
             return (
               <div
                 key={product.id}
-                className={`flex-none group/card relative select-none transition-all duration-300 ${
-                  isRanked ? 'w-64 sm:w-72 flex items-center' : 'w-48 sm:w-56 md:w-64'
-                }`}
+                className="w-56 sm:w-64 flex-none group/card relative select-none"
               >
-                {/* Netflix Iconic Oversized Rank Number for Top 10 */}
-                {isRanked && (
-                  <div className="flex-none -mr-4 sm:-mr-6 z-10 select-none pointer-events-none">
-                    <span
-                      className="text-7xl sm:text-8xl md:text-9xl font-black italic tracking-tighter leading-none"
-                      style={{
-                        WebkitTextStroke: '2.5px #52525b',
-                        color: '#09090b',
-                        fontFamily: 'impact, sans-serif',
-                      }}
-                    >
-                      {idx + 1}
-                    </span>
-                  </div>
-                )}
-
-                {/* Product Card Body */}
-                <div className="w-full flex-1 overflow-hidden rounded-md border border-zinc-800/90 bg-[#181818] transition duration-300 hover:border-zinc-500 hover:scale-[1.04] hover:shadow-2xl hover:shadow-black/80 flex flex-col justify-between">
-                  {/* Thumbnail Container */}
-                  <div className="relative aspect-[4/3] bg-zinc-950 overflow-hidden flex items-center justify-center p-3">
-                    {product.image ? (
+                <div className="studio-card-interactive flex h-full w-full flex-col justify-between overflow-hidden rounded-xl border border-zinc-800/90 bg-[#121215] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] hover:border-zinc-600">
+                  {/* Thumbnail Container (Clean Optical Stage) */}
+                  <div
+                    className={`relative aspect-[4/3] overflow-hidden rounded-lg p-3 flex items-center justify-center ${
+                      product.image && !failedImages[product.id] ? 'bg-white' : 'bg-zinc-900'
+                    }`}
+                  >
+                    {product.image && !failedImages[product.id] ? (
                       <img
                         src={product.image}
                         alt={product.name}
-                        className="h-full w-full object-contain filter group-hover/card:brightness-105 transition duration-300"
-                        loading="lazy"
+                        onError={() => setFailedImages((prev) => ({ ...prev, [product.id]: true }))}
+                        className="h-full w-full object-contain transition-transform duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover/card:scale-105"
+                        loading={idx < 4 ? 'eager' : 'lazy'}
                       />
                     ) : (
-                      <ShoppingBag className="h-10 w-10 text-zinc-700" />
+                      <div className="flex flex-col items-center justify-center gap-1 text-zinc-500">
+                        <ShoppingBag className="h-8 w-8 text-zinc-600" />
+                        <span className="font-mono text-[10px] uppercase tracking-wider">
+                          {product.sku}
+                        </span>
+                      </div>
                     )}
 
-                    {/* Quick Preview Hover Overlay */}
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/card:opacity-100 transition duration-200 flex items-center justify-center gap-2 p-2 backdrop-blur-2xs">
+                    {/* Industrial Rank Index Badge */}
+                    {isRanked && (
+                      <span className="absolute top-2 left-2 rounded-md border border-zinc-800 bg-zinc-950/90 px-2 py-0.5 font-mono text-[11px] font-black text-white shadow-sm">
+                        #{rankStr}
+                      </span>
+                    )}
+
+                    {/* Quick Action Overlay */}
+                    <div className="absolute inset-0 flex items-center justify-center gap-2 bg-zinc-950/55 p-2 opacity-0 backdrop-blur-[2px] transition-opacity duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover/card:opacity-100">
                       <button
                         type="button"
                         onClick={(e) => {
                           e.preventDefault()
                           onOpenPreview(product)
                         }}
-                        className="rounded-full bg-white/20 p-2.5 text-white hover:bg-white hover:text-black transition backdrop-blur-md cursor-pointer"
-                        title="Quick View"
+                        className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-zinc-900/90 text-white shadow-lg cursor-pointer transition-[transform,background-color,color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-white hover:text-zinc-950 active:scale-95"
+                        aria-label={`Quick inspect ${product.name}`}
+                        title="Inspect Spec Sheet"
                       >
                         <Eye className="h-4 w-4" />
                       </button>
@@ -170,61 +195,57 @@ export function NetflixRow({
                       <button
                         type="button"
                         onClick={(e) => handleQuickAdd(e, product)}
-                        className={`rounded-full p-2.5 transition backdrop-blur-md cursor-pointer ${
+                        className={`flex h-9 w-9 items-center justify-center rounded-full shadow-lg cursor-pointer transition-[transform,background-color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-95 ${
                           isAdded
-                            ? 'bg-emerald-500 text-black'
-                            : 'bg-amber-500 text-black hover:bg-amber-400'
+                            ? 'bg-emerald-500 text-zinc-950'
+                            : 'bg-[#E50914] text-white hover:bg-red-600'
                         }`}
-                        title="Add to Cart"
+                        aria-label={`Quick add ${product.name} to bag`}
+                        title="Add to Studio Bag"
                       >
                         {isAdded ? (
-                          <Check className="h-4 w-4 stroke-[3]" />
+                          <Check className="h-4 w-4 stroke-[2.5]" />
                         ) : (
-                          <Plus className="h-4 w-4 stroke-[3]" />
+                          <Plus className="h-4 w-4 stroke-[2.5]" />
                         )}
                       </button>
                     </div>
-
-                    {/* Special Price Tag */}
-                    {product.special_price && (
-                      <span className="absolute top-2 left-2 rounded bg-[#E50914] px-1.5 py-0.5 text-[9px] font-black uppercase text-white">
-                        SALE
-                      </span>
-                    )}
                   </div>
 
-                  {/* Card Info Details */}
-                  <div className="p-3 space-y-1.5 bg-[#181818]">
-                    <div className="flex items-center justify-between text-[10px]">
-                      <span className="text-emerald-400 font-bold">98% Match</span>
-                      <span className="text-zinc-500 font-mono">{product.sku}</span>
+                  {/* Card Telemetry Details */}
+                  <div className="mt-3 space-y-2">
+                    <div className="flex items-center justify-between font-mono text-[10px]">
+                      <span className="rounded bg-zinc-800/90 px-1.5 py-0.5 font-semibold text-zinc-300">
+                        {specLabel}
+                      </span>
+                      <span className="text-zinc-500 truncate max-w-[96px]">{product.sku}</span>
                     </div>
 
                     <Link
                       to="/products/$slug"
                       params={{ slug: product.slug }}
-                      className="block text-xs font-bold text-zinc-100 line-clamp-1 hover:text-amber-400 transition"
+                      className="block text-xs font-bold text-zinc-100 line-clamp-1 transition-colors duration-150 hover:text-white"
                       title={product.name}
                     >
                       {product.name}
                     </Link>
 
-                    {/* Price and Action Line */}
-                    <div className="flex items-center justify-between pt-1 border-t border-zinc-800">
+                    {/* Price & Variant Count */}
+                    <div className="flex items-center justify-between border-t border-zinc-800/80 pt-2">
                       <div className="flex items-baseline gap-1.5">
-                        <span className="text-xs font-black text-white">
+                        <span className="font-mono text-sm font-black text-white tabular-nums">
                           {formatPrice(product.price)}
                         </span>
                         {product.special_price && (
-                          <span className="text-[10px] text-zinc-500 line-through">
+                          <span className="font-mono text-[10px] text-zinc-500 line-through tabular-nums">
                             {formatPrice(product.special_price)}
                           </span>
                         )}
                       </div>
 
-                      <span className="text-[10px] font-semibold text-zinc-400">
-                        {product.options && product.options.length > 0
-                          ? `${product.children?.length || product.options[0].values.length} styles`
+                      <span className="font-mono text-[10px] font-semibold text-emerald-400">
+                        {product.variants && product.variants.length > 1
+                          ? `${product.variants.length} specs`
                           : 'In Stock'}
                       </span>
                     </div>
@@ -240,10 +261,10 @@ export function NetflixRow({
           <button
             type="button"
             onClick={() => scroll('right')}
-            className="absolute right-0 top-0 bottom-0 z-30 w-10 sm:w-12 bg-black/70 hover:bg-black/90 backdrop-blur-xs flex items-center justify-center text-white transition duration-200 opacity-0 group-hover/row:opacity-100 cursor-pointer"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-30 flex h-11 w-11 items-center justify-center rounded-full border border-zinc-700 bg-zinc-950/90 text-white shadow-xl backdrop-blur-md cursor-pointer transition-[transform,opacity,background-color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] opacity-0 group-hover/row:opacity-100 hover:bg-zinc-800 active:scale-95"
             aria-label="Scroll Right"
           >
-            <ChevronRight className="h-7 w-7 text-white" />
+            <ChevronRight className="h-5 w-5 text-white" />
           </button>
         )}
       </div>
